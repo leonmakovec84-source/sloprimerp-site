@@ -9,6 +9,7 @@ const ipEl = document.getElementById("server-ip");
 const discordTextEl = document.getElementById("server-discord-text");
 const connectEl = document.getElementById("server-connect");
 const discordLinkEl = document.getElementById("discordLink");
+const heroDiscordLinkEl = document.getElementById("heroDiscordLink");
 const bottomDiscordLinkEl = document.getElementById("bottomDiscordLink");
 const topJoinLinkEl = document.getElementById("topJoinLink");
 const heroJoinLinkEl = document.getElementById("heroJoinLink");
@@ -61,6 +62,7 @@ function applyBranding() {
   setText(connectEl, links.join ? links.join.replace("https://", "") : "--");
 
   setHref(discordLinkEl, links.discord || "#");
+  setHref(heroDiscordLinkEl, links.discord || "#");
   setHref(bottomDiscordLinkEl, links.discord || "#");
   setHref(topJoinLinkEl, links.join || "#kontakt-panel");
   setHref(heroJoinLinkEl, links.join || "#kontakt-panel");
@@ -201,6 +203,7 @@ async function loadServerData() {
     if (discordFromInfo) {
       setText(discordTextEl, discordFromInfo);
       setHref(discordLinkEl, discordFromInfo);
+      setHref(heroDiscordLinkEl, discordFromInfo);
       setHref(bottomDiscordLinkEl, discordFromInfo);
     }
   } catch (error) {
