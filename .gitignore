@@ -1,0 +1,4 @@
+node_modules/
+.env
+data/news.json
+data/social-feed.json

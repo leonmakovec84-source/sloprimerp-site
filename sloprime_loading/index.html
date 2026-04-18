@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLOPrimeRP Loading</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <video autoplay muted loop id="bgvideo">
+        <source src="video.mp4" type="video/mp4">
+    </video>
+
+    <div class="background"></div>
+    <div class="overlay-grid"></div>
+    <div class="overlay-glow"></div>
+
+    <div id="intro">
+        <img src="logo.png" class="intro-logo" alt="SLOPrimeRP logo">
+    </div>
+
+    <div id="main" class="hidden">
+        <div class="loading-layout">
+            <div class="corner-tag top-left">SLOVENSKI ROLEPLAY</div>
+            <div class="corner-tag top-right">FIVEM EXPERIENCE</div>
+
+            <aside class="side-column left-column">
+                <div class="info-panel brutal-panel">
+                    <div class="panel-header">
+                        <h2>POSODOBITVE</h2>
+                        <a id="newsChannelLink" href="#" target="_blank" rel="noreferrer">Odpri novice</a>
+                    </div>
+                    <div class="feed-list" id="newsFeed">
+                        <div class="feed-card">
+                            <strong>Priprava novic</strong>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="hero-area">
+                <div class="hero-badge">City stories. Zero limits.</div>
+                <img src="logo.png" class="logo" alt="SLOPrimeRP logo">
+                <p class="micro-copy">NEXT GENERATION SLO RP</p>
+                <h1 id="serverName">SLOPrimeRP</h1>
+                <p class="subtitle" id="serverSubtitle">Dobrodosel na strezniku</p>
+
+                <div class="progress-shell">
+                    <div class="progress-label-row">
+                        <span>LOADING SESSION</span>
+                        <span id="loadingPercent">0%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="bar" id="bar"></div>
+                    </div>
+                </div>
+
+                <p class="hero-footer">Created by leonjunak</p>
+            </section>
+
+            <aside class="side-column right-column">
+                <div class="info-panel brutal-panel">
+                    <div class="panel-header">
+                        <h2>SOCIAL MEDIA</h2>
+                        <a id="socialChannelLink" href="#" target="_blank" rel="noreferrer">Odpri kanal</a>
+                    </div>
+                    <div class="feed-list" id="socialFeed">
+                        <div class="feed-card">
+                            <strong>Priprava feeda</strong>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="staff-panel brutal-panel">
+                <div class="panel-header">
+                    <h2>STAFF TEAM</h2>
+                </div>
+                <div class="staff-list" id="staffList">
+                    <div class="staff-member">
+                        <strong>Owner</strong>
+                        <span>leonjunak</span>
+                        <span>𝓜𝓘𝓗𝓐123</span>
+                        <span>̷𝓚̷𝓾̷𝓴̷𝓪̷𝓻̷𝓬̷𝓪̷_̷8̷8̷</span>
+                    </div>
+                    <div class="staff-member">
+                        <strong>Management</strong>
+                        <span>team SLOPrimeRP</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="volume-panel brutal-panel">
+                <div class="music-actions">
+                    <button type="button" class="music-btn" id="musicPlay">Play</button>
+                    <button type="button" class="music-btn" id="musicPause">Pause</button>
+                </div>
+                <label class="volume-wrap" for="volumeSlider">
+                    <span>GLASNOST</span>
+                    <input id="volumeSlider" type="range" min="0" max="1" step="0.01" value="0.5">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <audio id="music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="loading-config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

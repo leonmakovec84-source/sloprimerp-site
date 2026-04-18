@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLOPrimeRP | FiveM Roleplay Server</title>
+  <meta
+    name="description"
+    content="SLOPrimeRP je slovenski FiveM roleplay server z aktivnimi frakcijami, pravili, donacijami, novicami in live status prikazom."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <div class="site-shell">
+    <header class="hero" id="domov">
+      <div class="hero-lights" aria-hidden="true">
+        <span class="light light-blue"></span>
+        <span class="light light-red"></span>
+      </div>
+      <div class="hero-atmosphere" aria-hidden="true">
+        <span class="fog fog-one"></span>
+        <span class="fog fog-two"></span>
+        <span class="spark spark-one"></span>
+        <span class="spark spark-two"></span>
+        <span class="spark spark-three"></span>
+      </div>
+
+      <nav class="topbar">
+        <a class="brand" href="#domov" aria-label="SLOPrimeRP domov">
+          <img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
+          <span class="brand-text">
+            <span class="brand-main">SLOPrime</span><span class="brand-accent">RP</span>
+          </span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Odpri meni">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="nav-links" id="navLinks">
+          <a href="index.html">Domov</a>
+          <a href="poklici.html">Poklici</a>
+          <a href="frakcije.html" target="_blank" rel="noreferrer">Frakcije</a>
+          <a href="pravila.html" target="_blank" rel="noreferrer">Pravila</a>
+          <a href="donacije.html" target="_blank" rel="noreferrer">Donacije</a>
+          <a href="novice.html" target="_blank" rel="noreferrer">Novice</a>
+          <a href="kontakt.html" target="_blank" rel="noreferrer">Kontakt</a>
+        </div>
+
+        <a class="join-top" id="topJoinLink" href="#kontakt-panel">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M20.3 4.37A17.4 17.4 0 0 0 16.06 3a12 12 0 0 0-.54 1.1 16.18 16.18 0 0 0-7.04 0A12 12 0 0 0 7.94 3a17.4 17.4 0 0 0-4.24 1.37C1.02 8.37.3 12.27.66 16.11a17.6 17.6 0 0 0 5.2 2.63c.42-.57.8-1.18 1.13-1.82-.62-.23-1.22-.52-1.78-.86.15-.11.3-.23.44-.35 3.44 1.6 7.17 1.6 10.57 0 .15.12.29.24.44.35-.57.34-1.16.63-1.78.86.33.64.71 1.25 1.13 1.82a17.6 17.6 0 0 0 5.2-2.63c.42-4.46-.72-8.32-3.91-11.74ZM8.58 13.79c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Zm6.84 0c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Z"
+            ></path>
+          </svg>
+          Pridruzi se
+        </a>
+      </nav>
+
+      <div class="hero-content reveal" data-depth="0.18">
+        <p class="hero-kicker" id="heroBadge">Roleplay server</p>
+        <button class="welcome-pill" type="button">Dobrodosli na SLOPrimeRP</button>
+        <h1 id="heroTitle">VSTOPI V SLOPRIME MESTO</h1>
+        <p class="hero-subtitle" id="heroSubtitle">Tvoja zgodba. Tvoja pravila. Tvoj dom.</p>
+
+        <div class="hero-actions">
+          <a class="button button-primary" id="heroJoinLink" href="#kontakt-panel">Pridruzi se</a>
+          <a class="button button-secondary" href="poklici.html">Poglej poklice</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="cards-row reveal" id="frakcije" data-stagger-group>
+      <article class="mini-card">
+        <h3>Poklici</h3>
+        <p>Pregled vseh najboljsih FiveM sluzb za javni, civilni in nightlife RP.</p>
+        <a href="poklici.html">Odpri poklice</a>
+      </article>
+      <article class="mini-card">
+        <h3>Frakcije</h3>
+        <p>Policija, EMS, mehaniki, vlada in civilne poti igranja.</p>
+        <a href="frakcije.html" target="_blank" rel="noreferrer">Izves vec</a>
+      </article>
+      <article class="mini-card" id="pravila">
+        <h3>Pravila</h3>
+        <p>Jasna pravila za posten, resen in kvaliteten roleplay.</p>
+        <a href="pravila.html" target="_blank" rel="noreferrer">Preberi pravila</a>
+      </article>
+      <article class="mini-card" id="donacije">
+        <h3>Donacije</h3>
+        <p>Podpri razvoj serverja in pomagaj graditi prihodnost skupnosti.</p>
+        <a href="donacije.html" target="_blank" rel="noreferrer">Podpri server</a>
+      </article>
+      <article class="mini-card" id="novice">
+        <h3>Novice</h3>
+        <p>Spremljaj zadnje posodobitve, evente in spremembe na serverju.</p>
+        <a href="novice.html" target="_blank" rel="noreferrer">Zadnje novice</a>
+      </article>
+      <article class="mini-card" id="kontakt">
+        <h3>Kontakt</h3>
+        <p>Discord, staff pomoc in vse povezave na enem mestu.</p>
+        <a href="kontakt.html" target="_blank" rel="noreferrer">Kontaktiraj nas</a>
+      </article>
+    </section>
+
+    <main class="content-grid" id="dobrodosel">
+      <aside class="status-panel reveal" data-depth="0.1">
+        <h2>Stanje serverja</h2>
+
+        <div class="status-item">
+          <span>Status</span>
+          <strong id="server-status" class="status-loading">Nalagam...</strong>
+        </div>
+
+        <div class="status-item">
+          <span>Igralci</span>
+          <strong id="server-players">-- / --</strong>
+        </div>
+
+        <div class="status-item">
+          <span>Server IP</span>
+          <strong id="server-ip">--</strong>
+        </div>
+
+        <div class="status-item">
+          <span>Discord</span>
+          <strong id="server-discord-text">--</strong>
+        </div>
+
+        <div class="status-item">
+          <span>Povezava</span>
+          <strong id="server-connect">cfx.re/join/...</strong>
+        </div>
+
+        <a class="discord-button" id="discordLink" href="#" target="_blank" rel="noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M20.3 4.37A17.4 17.4 0 0 0 16.06 3a12 12 0 0 0-.54 1.1 16.18 16.18 0 0 0-7.04 0A12 12 0 0 0 7.94 3a17.4 17.4 0 0 0-4.24 1.37C1.02 8.37.3 12.27.66 16.11a17.6 17.6 0 0 0 5.2 2.63c.42-.57.8-1.18 1.13-1.82-.62-.23-1.22-.52-1.78-.86.15-.11.3-.23.44-.35 3.44 1.6 7.17 1.6 10.57 0 .15.12.29.24.44.35-.57.34-1.16.63-1.78.86.33.64.71 1.25 1.13 1.82a17.6 17.6 0 0 0 5.2-2.63c.42-4.46-.72-8.32-3.91-11.74ZM8.58 13.79c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Zm6.84 0c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Z"
+            ></path>
+          </svg>
+          Discord server
+        </a>
+      </aside>
+
+      <section class="main-panel reveal" data-depth="0.08">
+        <div class="section-header">
+          <p class="section-kicker">Dobrodosel doma</p>
+          <h2 id="serverDescription">SLOPrimeRP je prostor za resen roleplay in mocno slovensko skupnost.</h2>
+        </div>
+
+        <p class="lead">
+          Tukaj nisi samo igralec. Tukaj gradis identiteto, odnose, posel, ugled in zgodbo,
+          ki ostane. Stran je pripravljena tako, da lahko live bere igralce, status, IP,
+          Discord povezavo in join link iz FiveM hosta.
+        </p>
+
+        <div class="feature-grid" id="frakcije-podrobno">
+          <article class="feature-box">
+            <h3>Frakcije</h3>
+            <p id="frakcije-panel">Pridruzi se policiji, EMS, mehanikom ali odpri svojo civilno zgodbo.</p>
+          </article>
+          <article class="feature-box">
+            <h3>Pravila</h3>
+            <p>Server temelji na resnem RP pristopu, spostovanju in jasnih mejah.</p>
+          </article>
+          <article class="feature-box">
+            <h3>Donacije</h3>
+            <p id="donacije-panel">Vsaka podpora pomaga pri razvoju sistema, eventov in izboljsav serverja.</p>
+          </article>
+          <article class="feature-box">
+            <h3>Novice</h3>
+            <p id="novice-panel">Na enem mestu vidis vse update objave, evente in pomembne informacije.</p>
+          </article>
+        </div>
+
+        <div class="cta-panel" id="kontakt-panel">
+          <div>
+            <p class="section-kicker">Kontakt in prijava</p>
+            <h3>Pridruzi se skupnosti in vstopi v mesto.</h3>
+          </div>
+          <div class="cta-actions">
+            <a class="button button-primary" id="bottomJoinLink" href="#">Pridruzi se</a>
+            <a class="button button-discord" id="bottomDiscordLink" href="#" target="_blank" rel="noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M20.3 4.37A17.4 17.4 0 0 0 16.06 3a12 12 0 0 0-.54 1.1 16.18 16.18 0 0 0-7.04 0A12 12 0 0 0 7.94 3a17.4 17.4 0 0 0-4.24 1.37C1.02 8.37.3 12.27.66 16.11a17.6 17.6 0 0 0 5.2 2.63c.42-.57.8-1.18 1.13-1.82-.62-.23-1.22-.52-1.78-.86.15-.11.3-.23.44-.35 3.44 1.6 7.17 1.6 10.57 0 .15.12.29.24.44.35-.57.34-1.16.63-1.78.86.33.64.71 1.25 1.13 1.82a17.6 17.6 0 0 0 5.2-2.63c.42-4.46-.72-8.32-3.91-11.74ZM8.58 13.79c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Zm6.84 0c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Z"
+                ></path>
+              </svg>
+              Discord
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

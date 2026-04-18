@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLOPrimeRP | Novice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-loader" id="siteLoader">
+    <div class="site-loader-inner">
+      <img class="site-loader-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
+      <p class="site-loader-text">Nalagam novice...</p>
+    </div>
+  </div>
+  <div class="page-bg"></div>
+  <div class="site-shell">
+    <nav class="topbar page-topbar">
+      <a class="brand" href="index.html"><img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo"><span class="brand-text"><span class="brand-main">SLOPrime</span><span class="brand-accent">RP</span></span></a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Odpri meni"><span></span><span></span><span></span></button>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Domov</a><a href="frakcije.html" target="_blank" rel="noreferrer">Frakcije</a><a href="pravila.html" target="_blank" rel="noreferrer">Pravila</a><a href="donacije.html" target="_blank" rel="noreferrer">Donacije</a><a href="novice.html">Novice</a><a href="kontakt.html" target="_blank" rel="noreferrer">Kontakt</a>
+      </div>
+      <a class="join-top" href="kontakt.html">Pridruzi se</a>
+    </nav>
+    <main class="subpage reveal is-visible">
+      <section class="subpage-hero">
+        <p class="section-kicker">Novice</p>
+        <h1>Zadnje objave in posodobitve.</h1>
+        <p class="lead">Objave iz Discord news kanala se lahko samodejno prikazejo tudi tukaj.</p>
+        <div class="hero-actions">
+          <a class="button button-discord" id="newsDiscordLink" href="#" target="_blank" rel="noreferrer">Odpri Discord novice</a>
+        </div>
+      </section>
+      <section class="info-stack" id="newsFeed">
+        <article class="info-panel">
+          <h3>Priprava novic</h3>
+          <p>Ko povezes Discord bota in kanal za novice, se bodo objave samodejno pokazale tukaj.</p>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
