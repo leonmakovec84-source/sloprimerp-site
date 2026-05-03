@@ -4,6 +4,7 @@ body {
     font-family: "Rajdhani", sans-serif;
     color: #eaffff;
     background: #02070a;
+    cursor: default;
 }
 
 body::after {
@@ -305,6 +306,42 @@ h1 {
     font-size: 14px;
 }
 
+.staff-member {
+    display: grid;
+    gap: 8px;
+}
+
+.staff-person {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.staff-status {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.staff-status.online {
+    color: #04120c;
+    background: #4ff3a8;
+    box-shadow: 0 0 18px rgba(79, 243, 168, 0.42);
+}
+
+.staff-status.offline {
+    color: #eaffff;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
 .music-actions {
     display: flex;
     gap: 10px;
@@ -336,6 +373,17 @@ h1 {
 
 #volumeSlider {
     width: 170px;
+}
+
+#main,
+.loading-layout,
+.hero-area,
+.staff-panel,
+.volume-panel,
+.music-btn,
+.volume-wrap,
+#volumeSlider {
+    pointer-events: auto;
 }
 
 @media (max-width: 1100px) {

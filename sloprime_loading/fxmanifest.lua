@@ -1,9 +1,13 @@
+fx_version 'cerulean'
+game 'gta5'
+
+loadscreen 'index.html'
+
 files {
     'index.html',
     'style.css',
     'script.js',
-    'loading-config.js',
-    'music.mp3',
+    'video.mp4',
     'logo.png',
-    'video.mp4'
+    'music.mp3'
 }

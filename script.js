@@ -1,6 +1,5 @@
 const config = window.SLOPRIME_CONFIG || {};
 const revealItems = document.querySelectorAll(".reveal");
-const menuToggle = document.getElementById("menuToggle");
 const navLinks = document.getElementById("navLinks");
 
 const statusEl = document.getElementById("server-status");
@@ -214,10 +213,8 @@ async function loadServerData() {
 }
 
 function initMenu() {
-  if (menuToggle && navLinks) {
-    menuToggle.addEventListener("click", () => {
-      navLinks.classList.toggle("is-open");
-    });
+  if (!navLinks) {
+    return;
   }
 }
 

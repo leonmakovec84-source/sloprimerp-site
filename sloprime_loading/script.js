@@ -1,8 +1,4 @@
 const loadingConfig = window.SLOPRIME_LOADING_CONFIG || {};
-const socialFeedEl = document.getElementById("socialFeed");
-const newsFeedEl = document.getElementById("newsFeed");
-const socialChannelLinkEl = document.getElementById("socialChannelLink");
-const newsChannelLinkEl = document.getElementById("newsChannelLink");
 const serverNameEl = document.getElementById("serverName");
 const serverSubtitleEl = document.getElementById("serverSubtitle");
 const staffListEl = document.getElementById("staffList");
@@ -32,38 +28,7 @@ function setProgress(percent) {
     }
 }
 
-function renderFeed(target, items, emptyTitle, emptyText) {
-    if (!target) {
-        return;
-    }
-
-    if (!items.length) {
-        target.innerHTML = `
-            <div class="feed-card">
-                <strong>${emptyTitle}</strong>
-                <p>${emptyText}</p>
-            </div>
-        `;
-        return;
-    }
-
-    target.innerHTML = items.map((item) => `
-        <div class="feed-card">
-            <strong>${escapeHtml(item.author || "Discord")}</strong>
-            <p>${escapeHtml(item.content || "Nova objava.").replaceAll("\n", "<br>")}</p>
-        </div>
-    `).join("");
-}
-
 function applyLoadingConfig() {
-    if (socialChannelLinkEl && loadingConfig.socialChannelUrl) {
-        socialChannelLinkEl.href = loadingConfig.socialChannelUrl;
-    }
-
-    if (newsChannelLinkEl && loadingConfig.newsChannelUrl) {
-        newsChannelLinkEl.href = loadingConfig.newsChannelUrl;
-    }
-
     if (serverNameEl && loadingConfig.serverName) {
         serverNameEl.textContent = loadingConfig.serverName;
     }
@@ -73,36 +38,107 @@ function applyLoadingConfig() {
     }
 
     if (staffListEl && Array.isArray(loadingConfig.staffMembers)) {
-        staffListEl.innerHTML = loadingConfig.staffMembers.map((member) => `
+        let personIndex = 0;
+
+        staffListEl.innerHTML = loadingConfig.staffMembers.map((member) => {
+            const people = Array.isArray(member.people) && member.people.length
+                ? member.people
+                : [{ name: member.name || "SLOPrimeRP", aliases: member.aliases || [] }];
+            const showStatus = member.showStatus !== false;
+
+            const peopleMarkup = people.map((person) => {
+                const currentIndex = personIndex;
+                if (showStatus) {
+                    personIndex += 1;
+                }
+
+                return `
+                    <div class="staff-person">
+                        <span>${escapeHtml(person.name || "SLOPrimeRP")}</span>
+                        ${showStatus ? `<span class="staff-status offline" id="staffStatus-${currentIndex}">Offline</span>` : ""}
+                    </div>
+                `;
+            }).join("");
+
+            return `
             <div class="staff-member">
                 <strong>${escapeHtml(member.role || "Staff")}</strong>
-                <span>${escapeHtml(member.name || "SLOPrimeRP")}</span>
+                ${peopleMarkup}
             </div>
-        `).join("");
+        `;
+        }).join("");
     }
 }
 
-async function loadFeed(apiUrl, target, emptyTitle, emptyText, errorText) {
-    if (!target || !apiUrl) {
+function getPeopleList() {
+    if (!Array.isArray(loadingConfig.staffMembers)) {
+        return [];
+    }
+
+    return loadingConfig.staffMembers.flatMap((member) => {
+        if (member.showStatus === false) {
+            return [];
+        }
+
+        if (Array.isArray(member.people) && member.people.length) {
+            return member.people;
+        }
+
+        return [{
+            name: member.name || "SLOPrimeRP",
+            aliases: member.aliases || []
+        }];
+    });
+}
+
+function getMemberAliases(member) {
+    const aliases = Array.isArray(member.aliases) ? member.aliases : [];
+    return [member.name, ...aliases]
+        .filter(Boolean)
+        .map((value) => String(value).trim().toLowerCase());
+}
+
+function setStaffStatus(index, isOnline, playerName = "") {
+    const statusEl = document.getElementById(`staffStatus-${index}`);
+    if (!statusEl) {
+        return;
+    }
+
+    statusEl.textContent = isOnline ? `Online${playerName ? ` - ${playerName}` : ""}` : "Offline";
+    statusEl.classList.toggle("online", isOnline);
+    statusEl.classList.toggle("offline", !isOnline);
+}
+
+async function loadStaffStatuses() {
+    const people = getPeopleList();
+
+    if (!staffListEl || !people.length || !loadingConfig.serverEndpoint) {
         return;
     }
 
     try {
-        const response = await fetch(apiUrl, { cache: "no-store" });
+        const response = await fetch(`${loadingConfig.serverEndpoint}/players.json`, { cache: "no-store" });
         if (!response.ok) {
-            throw new Error("Feed error");
+            throw new Error("Players endpoint error");
         }
 
-        const data = await response.json();
-        const items = Array.isArray(data.items) ? data.items.slice(0, 3) : [];
-        renderFeed(target, items, emptyTitle, emptyText);
+        const players = await response.json();
+        const normalizedPlayers = Array.isArray(players)
+            ? players.map((player) => ({
+                ...player,
+                normalizedName: String(player?.name || "").trim().toLowerCase()
+            }))
+            : [];
+
+        people.forEach((member, index) => {
+            const aliases = getMemberAliases(member);
+            const matchingPlayer = normalizedPlayers.find((player) => aliases.includes(player.normalizedName));
+            setStaffStatus(index, Boolean(matchingPlayer), matchingPlayer?.name || "");
+        });
     } catch (error) {
-        target.innerHTML = `
-            <div class="feed-card">
-                <strong>Feed ni dosegljiv</strong>
-                <p>${errorText}</p>
-            </div>
-        `;
+        people.forEach((member, index) => {
+            setStaffStatus(index, false);
+        });
     }
 }
 
@@ -129,20 +165,7 @@ function initMusicControls() {
 }
 
 applyLoadingConfig();
-loadFeed(
-    loadingConfig.newsApiUrl,
-    newsFeedEl,
-    "Ni novic",
-    "Ko bodo objavljene Discord novice, se bodo prikazale tukaj.",
-    "Preveri povezavo z news API-jem."
-);
-loadFeed(
-    loadingConfig.socialApiUrl,
-    socialFeedEl,
-    "Ni stream objav",
-    "Ko bodo youtuberji objavili stream v social-media kanal, se bodo objave prikazale tukaj.",
-    "Preveri povezavo z social-media API-jem."
-);
+loadStaffStatuses();
 initMusicControls();
 setProgress(0);
 
@@ -171,3 +194,5 @@ window.addEventListener("message", (e) => {
         setProgress((e.data.loadFraction || 0) * 100);
     }
 });
+
+setInterval(loadStaffStatuses, 30000);
