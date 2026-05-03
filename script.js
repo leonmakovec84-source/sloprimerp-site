@@ -19,7 +19,6 @@ const heroSubtitleEl = document.getElementById("heroSubtitle");
 const serverDescriptionEl = document.getElementById("serverDescription");
 const heroEl = document.querySelector(".hero");
 const depthItems = document.querySelectorAll("[data-depth]");
-const factionLinkEls = document.querySelectorAll("[data-faction-link]");
 const siteLoaderEl = document.getElementById("siteLoader");
 const newsFeedEl = document.getElementById("newsFeed");
 const newsDiscordLinkEl = document.getElementById("newsDiscordLink");
@@ -36,6 +35,24 @@ function setHref(el, value) {
   }
 }
 
+function initJoinLinks() {
+  const joinUrl = config.links?.join;
+  if (!joinUrl) {
+    return;
+  }
+
+  [topJoinLinkEl, heroJoinLinkEl, bottomJoinLinkEl]
+    .filter(Boolean)
+    .forEach((link) => {
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noreferrer");
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.open(joinUrl, "_blank", "noopener,noreferrer");
+      });
+    });
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -49,7 +66,6 @@ function applyBranding() {
   const branding = config.branding || {};
   const links = config.links || {};
   const serverCfg = config.serverCfg || {};
-  const factionLinks = config.factionLinks || {};
   const news = config.news || {};
 
   setText(heroBadgeEl, branding.heroBadge || "FiveM roleplay server");
@@ -67,13 +83,6 @@ function applyBranding() {
   setHref(heroJoinLinkEl, links.join || "#kontakt-panel");
   setHref(bottomJoinLinkEl, links.join || "#kontakt-panel");
   setHref(newsDiscordLinkEl, news.discordChannelUrl || links.discord || "#");
-
-  factionLinkEls.forEach((el) => {
-    const key = el.getAttribute("data-faction-link");
-    if (key && factionLinks[key]) {
-      el.href = factionLinks[key];
-    }
-  });
 }
 
 async function loadNewsFeed() {
@@ -274,6 +283,7 @@ function initLoader() {
 }
 
 applyBranding();
+initJoinLinks();
 initMenu();
 initReveal();
 initParallax();

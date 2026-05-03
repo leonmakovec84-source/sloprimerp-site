@@ -23,22 +23,6 @@ window.SLOPRIME_CONFIG = {
     economy: "Hard RP",
     whitelist: "closed"
   },
-  factionLinks: {
-    lspd: "policija.html",
-    sheriffi: "sheriffi.html",
-    ems: "ems.html",
-    mechanic: "mehaniki.html",
-    gasilci: "gasilci.html",
-    bahama: "bahama.html",
-    uwu: "uwu-cat-cafe.html",
-    burgershot: "burgershot.html",
-    kebabking: "kebab-king.html",
-    vanilla: "vanilla-unicorn.html",
-    koi: "koi.html",
-    pearls: "pearls.html",
-    vlada: "vlada.html",
-    novice: "novice.html"
-  },
   news: {
     apiUrl: "/api/news",
     discordChannelUrl: "https://discord.com/channels/1384199998081732608/1492519013924737154"
