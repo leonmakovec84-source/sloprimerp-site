@@ -36,48 +36,6 @@ function setHref(el, value) {
   }
 }
 
-function initJoinButtons() {
-  const joinLinks = [topJoinLinkEl, heroJoinLinkEl, bottomJoinLinkEl].filter(Boolean);
-  const directJoin = config.links?.join;
-  const fallbackJoin = config.links?.joinFallback;
-
-  if (!joinLinks.length || !directJoin) {
-    return;
-  }
-
-  joinLinks.forEach((link) => {
-    link.addEventListener("click", (event) => {
-      if (!directJoin.startsWith("fivem://")) {
-        return;
-      }
-
-      event.preventDefault();
-
-      const fallbackTimer = window.setTimeout(() => {
-        if (fallbackJoin) {
-          window.open(fallbackJoin, "_blank", "noopener,noreferrer");
-        }
-      }, 900);
-
-      const clearFallback = () => {
-        window.clearTimeout(fallbackTimer);
-        document.removeEventListener("visibilitychange", clearOnHidden);
-        window.removeEventListener("blur", clearFallback);
-      };
-
-      const clearOnHidden = () => {
-        if (document.visibilityState === "hidden") {
-          clearFallback();
-        }
-      };
-
-      document.addEventListener("visibilitychange", clearOnHidden);
-      window.addEventListener("blur", clearFallback, { once: true });
-      window.location.href = directJoin;
-    });
-  });
-}
-
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -320,7 +278,6 @@ initMenu();
 initReveal();
 initParallax();
 initLoader();
-initJoinButtons();
 loadServerData();
 loadNewsFeed();
 
