@@ -4,15 +4,8 @@ const navLinks = document.getElementById("navLinks");
 
 const statusEl = document.getElementById("server-status");
 const playersEl = document.getElementById("server-players");
-const ipEl = document.getElementById("server-ip");
-const discordTextEl = document.getElementById("server-discord-text");
-const connectEl = document.getElementById("server-connect");
-const discordLinkEl = document.getElementById("discordLink");
 const heroDiscordLinkEl = document.getElementById("heroDiscordLink");
 const bottomDiscordLinkEl = document.getElementById("bottomDiscordLink");
-const topJoinLinkEl = document.getElementById("topJoinLink");
-const heroJoinLinkEl = document.getElementById("heroJoinLink");
-const bottomJoinLinkEl = document.getElementById("bottomJoinLink");
 const heroBadgeEl = document.getElementById("heroBadge");
 const heroTitleEl = document.getElementById("heroTitle");
 const heroSubtitleEl = document.getElementById("heroSubtitle");
@@ -35,24 +28,6 @@ function setHref(el, value) {
   }
 }
 
-function initJoinLinks() {
-  const joinUrl = config.links?.join;
-  if (!joinUrl) {
-    return;
-  }
-
-  [topJoinLinkEl, heroJoinLinkEl, bottomJoinLinkEl]
-    .filter(Boolean)
-    .forEach((link) => {
-      link.setAttribute("target", "_blank");
-      link.setAttribute("rel", "noreferrer");
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
-        window.open(joinUrl, "_blank", "noopener,noreferrer");
-      });
-    });
-}
-
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -72,16 +47,8 @@ function applyBranding() {
   setText(heroTitleEl, branding.heroTitle || "VSTOPI V MESTO");
   setText(heroSubtitleEl, branding.heroSubtitle || "Tvoja zgodba. Tvoja pravila. Tvoj dom.");
   setText(serverDescriptionEl, branding.description || "Dobrodosel na roleplay server.");
-  setText(ipEl, links.websiteIpText || "--");
-  setText(discordTextEl, serverCfg.discordText || links.discord || "--");
-  setText(connectEl, links.join ? links.join.replace("https://", "") : "--");
-
-  setHref(discordLinkEl, links.discord || "#");
   setHref(heroDiscordLinkEl, links.discord || "#");
   setHref(bottomDiscordLinkEl, links.discord || "#");
-  setHref(topJoinLinkEl, links.join || "#kontakt-panel");
-  setHref(heroJoinLinkEl, links.join || "#kontakt-panel");
-  setHref(bottomJoinLinkEl, links.join || "#kontakt-panel");
   setHref(newsDiscordLinkEl, news.discordChannelUrl || links.discord || "#");
 }
 
@@ -204,13 +171,8 @@ async function loadServerData() {
     setStatus("status-online", "Online");
     setText(playersEl, `${playerCount || 0} / ${maxPlayers || "--"}`);
 
-    const endpointText = endpoint.replace(/^https?:\/\//, "");
-    setText(ipEl, (config.links && config.links.websiteIpText) || endpointText);
-
     const discordFromInfo = info?.vars?.Discord || info?.vars?.discord;
     if (discordFromInfo) {
-      setText(discordTextEl, discordFromInfo);
-      setHref(discordLinkEl, discordFromInfo);
       setHref(heroDiscordLinkEl, discordFromInfo);
       setHref(bottomDiscordLinkEl, discordFromInfo);
     }
@@ -283,7 +245,6 @@ function initLoader() {
 }
 
 applyBranding();
-initJoinLinks();
 initMenu();
 initReveal();
 initParallax();
