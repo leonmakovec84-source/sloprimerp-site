@@ -26,5 +26,8 @@ window.SLOPRIME_CONFIG = {
   news: {
     apiUrl: "/api/news",
     discordChannelUrl: "https://discord.com/channels/1384199998081732608/1492519013924737154"
+  },
+  donations: {
+    tebexUrl: "https://YOUR_TEBEX_LINK"
   }
 };

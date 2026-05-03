@@ -15,6 +15,7 @@ const depthItems = document.querySelectorAll("[data-depth]");
 const siteLoaderEl = document.getElementById("siteLoader");
 const newsFeedEl = document.getElementById("newsFeed");
 const newsDiscordLinkEl = document.getElementById("newsDiscordLink");
+const tebexLinkEl = document.getElementById("tebexLink");
 
 function setText(id, value) {
   if (id) {
@@ -42,6 +43,7 @@ function applyBranding() {
   const links = config.links || {};
   const serverCfg = config.serverCfg || {};
   const news = config.news || {};
+  const donations = config.donations || {};
 
   setText(heroBadgeEl, branding.heroBadge || "FiveM roleplay server");
   setText(heroTitleEl, branding.heroTitle || "VSTOPI V MESTO");
@@ -50,6 +52,7 @@ function applyBranding() {
   setHref(heroDiscordLinkEl, links.discord || "#");
   setHref(bottomDiscordLinkEl, links.discord || "#");
   setHref(newsDiscordLinkEl, news.discordChannelUrl || links.discord || "#");
+  setHref(tebexLinkEl, donations.tebexUrl || "#");
 }
 
 async function loadNewsFeed() {
