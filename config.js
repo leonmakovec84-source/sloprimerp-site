@@ -9,6 +9,7 @@ window.SLOPRIME_CONFIG = {
   links: {
     discord: "https://discord.gg/MtqmHJDR",
     join: "fivem://connect/31.56.25.244:30120",
+    joinFallback: "https://cfx.re/join/gadq4xz",
     websiteIpText: "31.56.25.244:30120"
   },
   server: {
