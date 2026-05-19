@@ -1,25 +1,9 @@
 const config = window.SLOPRIME_CONFIG || {};
-const revealItems = document.querySelectorAll(".reveal");
-const navLinks = document.getElementById("navLinks");
+const authStorageKey = "sloprimerp_auth_token";
 
-const statusEl = document.getElementById("server-status");
-const playersEl = document.getElementById("server-players");
-const heroDiscordLinkEl = document.getElementById("heroDiscordLink");
-const bottomDiscordLinkEl = document.getElementById("bottomDiscordLink");
-const heroBadgeEl = document.getElementById("heroBadge");
-const heroTitleEl = document.getElementById("heroTitle");
-const heroSubtitleEl = document.getElementById("heroSubtitle");
-const serverDescriptionEl = document.getElementById("serverDescription");
-const heroEl = document.querySelector(".hero");
-const depthItems = document.querySelectorAll("[data-depth]");
-const siteLoaderEl = document.getElementById("siteLoader");
-const newsFeedEl = document.getElementById("newsFeed");
-const newsDiscordLinkEl = document.getElementById("newsDiscordLink");
-const tebexLinkEl = document.getElementById("tebexLink");
-
-function setText(id, value) {
-  if (id) {
-    id.textContent = value;
+function setText(el, value) {
+  if (el) {
+    el.textContent = value;
   }
 }
 
@@ -29,110 +13,151 @@ function setHref(el, value) {
   }
 }
 
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll("\"", "&quot;")
-    .replaceAll("'", "&#39;");
+function currency(value) {
+  return new Intl.NumberFormat("sl-SI", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0
+  }).format(Number(value || 0));
+}
+
+function getAuthToken() {
+  return window.localStorage.getItem(authStorageKey) || "";
+}
+
+function setAuthToken(token) {
+  if (!token) {
+    window.localStorage.removeItem(authStorageKey);
+    return;
+  }
+
+  window.localStorage.setItem(authStorageKey, token);
+}
+
+async function requestJson(url, options = {}) {
+  const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    },
+    ...options
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.error || "Request failed");
+  }
+
+  return data;
+}
+
+function initNavbar() {
+  const navbar = document.getElementById("topbar");
+  const menuButton = document.getElementById("menuButton");
+  const menuClose = document.getElementById("menuClose");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  if (navbar) {
+    const syncScroll = () => {
+      navbar.classList.toggle("is-scrolled", window.scrollY > 14);
+    };
+
+    syncScroll();
+    window.addEventListener("scroll", syncScroll, { passive: true });
+  }
+
+  if (menuButton && mobileMenu) {
+    menuButton.addEventListener("click", () => {
+      mobileMenu.classList.add("is-open");
+      mobileMenu.setAttribute("aria-hidden", "false");
+    });
+  }
+
+  if (menuClose && mobileMenu) {
+    menuClose.addEventListener("click", () => {
+      mobileMenu.classList.remove("is-open");
+      mobileMenu.setAttribute("aria-hidden", "true");
+    });
+  }
+}
+
+function initReveal() {
+  const revealItems = document.querySelectorAll(".reveal");
+  if (!revealItems.length) {
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.14 });
+
+  revealItems.forEach((item) => observer.observe(item));
 }
 
 function applyBranding() {
   const branding = config.branding || {};
   const links = config.links || {};
-  const serverCfg = config.serverCfg || {};
-  const news = config.news || {};
-  const donations = config.donations || {};
 
-  setText(heroBadgeEl, branding.heroBadge || "FiveM roleplay server");
-  setText(heroTitleEl, branding.heroTitle || "VSTOPI V MESTO");
-  setText(heroSubtitleEl, branding.heroSubtitle || "Tvoja zgodba. Tvoja pravila. Tvoj dom.");
-  setText(serverDescriptionEl, branding.description || "Dobrodosel na roleplay server.");
-  setHref(heroDiscordLinkEl, links.discord || "#");
-  setHref(bottomDiscordLinkEl, links.discord || "#");
-  setHref(newsDiscordLinkEl, news.discordChannelUrl || links.discord || "#");
-  setHref(tebexLinkEl, donations.tebexUrl || "#");
+  setText(document.getElementById("heroBadge"), branding.heroBadge);
+  setText(document.getElementById("heroTitle"), branding.heroTitle);
+  setText(document.getElementById("heroSubtitle"), branding.heroSubtitle);
+  setText(document.getElementById("communityTitle"), branding.communityTitle);
+  setText(document.getElementById("communityText"), branding.communityText);
+  setHref(document.getElementById("discordLink"), links.discord || "#");
+  setHref(document.getElementById("discordSectionLink"), links.discord || "#");
+  setHref(document.getElementById("footerDiscordLink"), links.discord || "#");
+  setHref(document.getElementById("connectLink"), links.join || "#");
+  setHref(document.getElementById("connectLinkStep"), links.join || "#");
+  setHref(document.getElementById("tebexLink"), links.tebex || "#");
+  setText(document.getElementById("server-ip"), links.websiteIpText || "--");
 }
 
-async function loadNewsFeed() {
-  if (!newsFeedEl || !config.news?.apiUrl) {
+function renderGallery() {
+  const galleryGrid = document.getElementById("galleryGrid");
+  const items = config.gallery || [];
+
+  if (!galleryGrid || !items.length) {
     return;
   }
 
-  try {
-    const response = await fetch(config.news.apiUrl, { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error("News API error");
-    }
-
-    const data = await response.json();
-    const items = Array.isArray(data.items) ? data.items : [];
-
-    if (!items.length) {
-      newsFeedEl.innerHTML = `
-        <article class="info-panel">
-          <h3>Ni se novic</h3>
-          <p>Bot se se ni sinhroniziral z Discord news kanalom ali pa v kanalu se ni objav.</p>
-        </article>
-      `;
-      return;
-    }
-
-    newsFeedEl.innerHTML = items.map((item) => {
-      const date = new Date(item.createdAt);
-      const formattedDate = Number.isNaN(date.getTime()) ? "Discord objava" : date.toLocaleString("sl-SI");
-      const content = item.content
-        ? escapeHtml(item.content).replaceAll("\n", "<br>")
-        : "Objava brez dodatnega besedila.";
-      const attachment = item.attachments?.[0]
-        ? `<img class="news-image" src="${item.attachments[0]}" alt="Discord novica">`
-        : "";
-      const link = item.url
-        ? `<a class="news-link" href="${item.url}" target="_blank" rel="noreferrer">Odpri objavo na Discordu</a>`
-        : "";
-
-      return `
-        <article class="info-panel">
-          <h3>${escapeHtml(item.author || "Discord")}</h3>
-          <p class="news-meta">${formattedDate}</p>
-          <p>${content}</p>
-          ${attachment}
-          ${link}
-        </article>
-      `;
-    }).join("");
-  } catch (error) {
-    newsFeedEl.innerHTML = `
-      <article class="info-panel">
-        <h3>Napaka pri nalaganju novic</h3>
-        <p>Preveri ali backend in Discord bot teceta pravilno.</p>
-      </article>
-    `;
-  }
+  galleryGrid.innerHTML = items.map((item) => `
+    <article class="gallery-card premium-panel reveal is-visible">
+      <div class="gallery-card-content">
+        <span class="section-tag">Visual</span>
+        <h3>${item.title}</h3>
+        <p>${item.text}</p>
+      </div>
+    </article>
+  `).join("");
 }
 
-function setStatus(state, label) {
-  if (!statusEl) {
-    return;
-  }
+function setServerStatus(state, label) {
+  const statusText = document.getElementById("server-status");
+  const dot = document.getElementById("statusDot");
 
-  statusEl.classList.remove("status-online", "status-offline", "status-loading");
-  statusEl.classList.add(state);
-  statusEl.textContent = label;
+  setText(statusText, label);
+
+  if (dot) {
+    dot.classList.toggle("is-offline", state !== "online");
+  }
 }
 
 async function loadServerData() {
-  const server = config.server || {};
-  const endpoint = server.endpoint;
+  const playersEl = document.getElementById("server-players");
+  const endpoint = config.server?.endpoint;
 
-  if (!endpoint) {
-    setStatus("status-offline", "Ni nastavljen");
+  if (!playersEl || !endpoint) {
     return;
   }
 
   try {
-    setStatus("status-loading", "Nalagam...");
+    setServerStatus("loading", "Nalagam...");
 
     const responses = await Promise.allSettled([
       fetch(`${endpoint}/dynamic.json`, { cache: "no-store" }),
@@ -146,114 +171,219 @@ async function loadServerData() {
       dynamicResult.status === "fulfilled" && dynamicResult.value.ok
         ? await dynamicResult.value.json()
         : null;
-
     const info =
       infoResult.status === "fulfilled" && infoResult.value.ok
         ? await infoResult.value.json()
         : null;
-
     const players =
       playersResult.status === "fulfilled" && playersResult.value.ok
         ? await playersResult.value.json()
         : null;
 
     if (!dynamic && !info && !players) {
-      throw new Error("Noben FiveM endpoint ni vrnil podatkov.");
+      throw new Error("Offline");
     }
 
-    const playerCount = Array.isArray(players)
-      ? players.length
-      : Number(dynamic?.clients || 0);
-
+    const playerCount = Array.isArray(players) ? players.length : Number(dynamic?.clients || 0);
     const maxPlayers =
       Number(dynamic?.sv_maxclients) ||
       Number(info?.vars?.sv_maxClients) ||
-      Number(server.maxPlayers) ||
+      Number(config.server?.maxPlayers) ||
       0;
 
-    setStatus("status-online", "Online");
-    setText(playersEl, `${playerCount || 0} / ${maxPlayers || "--"}`);
-
-    const discordFromInfo = info?.vars?.Discord || info?.vars?.discord;
-    if (discordFromInfo) {
-      setHref(heroDiscordLinkEl, discordFromInfo);
-      setHref(bottomDiscordLinkEl, discordFromInfo);
-    }
-  } catch (error) {
-    const fallbackOnline = Boolean(config.server?.fallbackOnline);
-    setStatus(fallbackOnline ? "status-online" : "status-offline", fallbackOnline ? "Online" : "Offline");
+    setServerStatus("online", "Online");
+    setText(playersEl, `${playerCount} / ${maxPlayers || "--"}`);
+  } catch {
+    setServerStatus("offline", "Offline");
     setText(playersEl, `0 / ${config.server?.maxPlayers || "--"}`);
   }
 }
 
-function initMenu() {
-  if (!navLinks) {
-    return;
-  }
-}
+async function handleLogin(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const messageEl = document.getElementById("authMessage");
+  const email = form.email.value.trim();
+  const password = form.password.value;
 
-function initReveal() {
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    revealItems.forEach((item) => observer.observe(item));
-  } else {
-    revealItems.forEach((item) => item.classList.add("is-visible"));
-  }
-}
-
-function initParallax() {
-  if (!heroEl || window.innerWidth < 900) {
-    return;
-  }
-
-  heroEl.addEventListener("mousemove", (event) => {
-    const rect = heroEl.getBoundingClientRect();
-    const px = (event.clientX - rect.left) / rect.width - 0.5;
-    const py = (event.clientY - rect.top) / rect.height - 0.5;
-
-    depthItems.forEach((item) => {
-      const depth = Number(item.getAttribute("data-depth")) || 0.1;
-      const moveX = px * 30 * depth;
-      const moveY = py * 24 * depth;
-      item.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+  try {
+    const data = await requestJson("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password })
     });
-  });
 
-  heroEl.addEventListener("mouseleave", () => {
-    depthItems.forEach((item) => {
-      item.style.transform = "";
-    });
-  });
+    setAuthToken(data.token);
+    messageEl.className = "form-message is-success";
+    messageEl.textContent = "Prijava uspesna. Preusmerjam na dashboard...";
+    window.setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 700);
+  } catch (error) {
+    messageEl.className = "form-message is-error";
+    messageEl.textContent = error.message;
+  }
 }
 
-function initLoader() {
-  if (!siteLoaderEl) {
+async function handleRegister(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const messageEl = document.getElementById("authMessage");
+  const username = form.username.value.trim();
+  const email = form.email.value.trim();
+  const password = form.password.value;
+
+  try {
+    const data = await requestJson("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify({ username, email, password })
+    });
+
+    setAuthToken(data.token);
+    messageEl.className = "form-message is-success";
+    messageEl.textContent = "Registracija uspesna. Preusmerjam na dashboard...";
+    window.setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 700);
+  } catch (error) {
+    messageEl.className = "form-message is-error";
+    messageEl.textContent = error.message;
+  }
+}
+
+async function handleForgotPassword(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const messageEl = document.getElementById("authMessage");
+
+  try {
+    const data = await requestJson("/api/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ email: form.email.value.trim() })
+    });
+    messageEl.className = "form-message is-success";
+    messageEl.textContent = data.message || "Zahteva poslana.";
+  } catch (error) {
+    messageEl.className = "form-message is-error";
+    messageEl.textContent = error.message;
+  }
+}
+
+async function loadDashboard() {
+  if (!document.body.classList.contains("dashboard-page")) {
     return;
   }
 
-  window.setTimeout(() => {
-    siteLoaderEl.classList.add("is-hidden");
-  }, 900);
+  const token = getAuthToken();
+  if (!token) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  try {
+    const profile = await requestJson("/api/dashboard/overview", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    setText(document.getElementById("dashboardPlayerName"), profile.playerName);
+    setText(document.getElementById("dashboardSummary"), profile.summary);
+    setText(document.getElementById("dashboardPlayerId"), profile.playerId);
+    setText(document.getElementById("dashboardPhone"), profile.phone);
+    setText(document.getElementById("dashboardMoney"), currency(profile.money));
+    setText(document.getElementById("dashboardBank"), currency(profile.bank));
+    setText(document.getElementById("dashboardJob"), profile.job);
+    setText(document.getElementById("dashboardJobRank"), profile.jobRank);
+    setText(document.getElementById("linkTokenValue"), profile.linkToken);
+    setText(document.getElementById("linkTokenCommand"), `/link ${profile.linkToken}`);
+
+    const inventoryList = document.getElementById("inventoryList");
+    const vehicleList = document.getElementById("vehicleList");
+    const statList = document.getElementById("statList");
+
+    inventoryList.innerHTML = profile.inventory.map((item) => `
+      <div class="inventory-item">
+        <span>${item.label}</span>
+        <strong>${item.value}</strong>
+      </div>
+    `).join("");
+
+    vehicleList.innerHTML = profile.vehicles.map((vehicle) => `
+      <div class="vehicle-item">
+        <span>${vehicle.plate}</span>
+        <strong>${vehicle.model}</strong>
+      </div>
+    `).join("");
+
+    statList.innerHTML = profile.stats.map((item) => `
+      <div class="stat-item">
+        <span>${item.label}</span>
+        <strong>${item.value}</strong>
+      </div>
+    `).join("");
+  } catch (error) {
+    setAuthToken("");
+    window.location.href = "login.html";
+  }
+}
+
+async function regenerateLinkToken() {
+  const token = getAuthToken();
+  if (!token) {
+    return;
+  }
+
+  try {
+    const data = await requestJson("/api/account/regenerate-link-token", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    setText(document.getElementById("linkTokenValue"), data.linkToken);
+    setText(document.getElementById("linkTokenCommand"), `/link ${data.linkToken}`);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function initAuthPages() {
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+  const logoutButton = document.getElementById("logoutButton");
+  const regenLinkTokenButton = document.getElementById("regenLinkTokenButton");
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", handleLogin);
+  }
+
+  if (registerForm) {
+    registerForm.addEventListener("submit", handleRegister);
+  }
+
+  if (forgotPasswordForm) {
+    forgotPasswordForm.addEventListener("submit", handleForgotPassword);
+  }
+
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      setAuthToken("");
+      window.location.href = "login.html";
+    });
+  }
+
+  if (regenLinkTokenButton) {
+    regenLinkTokenButton.addEventListener("click", regenerateLinkToken);
+  }
 }
 
 applyBranding();
-initMenu();
+initNavbar();
 initReveal();
-initParallax();
-initLoader();
+renderGallery();
+initAuthPages();
+loadDashboard();
 loadServerData();
-loadNewsFeed();
-
-const refreshInterval = Number(config.server?.refreshIntervalMs) || 30000;
-window.setInterval(loadServerData, refreshInterval);
+window.setInterval(loadServerData, Number(config.server?.refreshIntervalMs) || 30000);

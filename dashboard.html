@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLOPrimeRP | Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-shell dashboard-page">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+
+  <header class="navbar dashboard-navbar">
+    <div class="container navbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
+        <span class="brand-wordmark">SLOPrimeRP</span>
+      </a>
+      <nav class="desktop-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="dashboard.html" class="nav-link is-active">Dashboard</a>
+        <a href="pravila.html" class="nav-link">Pravila</a>
+        <a href="donacije.html" class="nav-link">Tebex</a>
+      </nav>
+      <div class="navbar-actions">
+        <button class="ghost-button" id="logoutButton" type="button">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-shell container">
+    <section class="dashboard-header premium-panel">
+      <div>
+        <span class="section-tag">Protected dashboard</span>
+        <h1 id="dashboardPlayerName">Nalagam account...</h1>
+        <p id="dashboardSummary">Pregled roleplay podatkov, financ, statusa in account linking sistema.</p>
+      </div>
+      <div class="dashboard-header-meta">
+        <div>
+          <span>Player ID</span>
+          <strong id="dashboardPlayerId">--</strong>
+        </div>
+        <div>
+          <span>Telefon</span>
+          <strong id="dashboardPhone">--</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="link-warning premium-panel" id="accountLinkPanel">
+      <div class="link-warning-head">
+        <div>
+          <span class="section-tag">Account linking</span>
+          <h2>Account Not Linked</h2>
+          <p>Povezi svoj SLOPrimeRP character za dostop do player data, financ, vozil in naprednega dashboard pregleda.</p>
+        </div>
+        <button class="button button-gold" id="regenLinkTokenButton" type="button">Regenerate link token</button>
+      </div>
+      <div class="token-box">
+        <span>Use this token in-game:</span>
+        <strong id="linkTokenValue">Nalagam...</strong>
+      </div>
+      <div class="token-command">
+        <span>Command:</span>
+        <code id="linkTokenCommand">/link ...</code>
+      </div>
+    </section>
+
+    <section class="dashboard-cards">
+      <article class="dashboard-card premium-panel">
+        <span>Cash</span>
+        <strong id="dashboardMoney">$ 0</strong>
+      </article>
+      <article class="dashboard-card premium-panel">
+        <span>Bank</span>
+        <strong id="dashboardBank">$ 0</strong>
+      </article>
+      <article class="dashboard-card premium-panel">
+        <span>Job</span>
+        <strong id="dashboardJob">--</strong>
+      </article>
+      <article class="dashboard-card premium-panel">
+        <span>Job rank</span>
+        <strong id="dashboardJobRank">--</strong>
+      </article>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="dashboard-panel premium-panel">
+        <div class="panel-heading">
+          <span class="section-tag">Inventory overview</span>
+          <h3>Glavni inventory pregled</h3>
+        </div>
+        <div class="inventory-list" id="inventoryList"></div>
+      </article>
+
+      <article class="dashboard-panel premium-panel">
+        <div class="panel-heading">
+          <span class="section-tag">Owned vehicles</span>
+          <h3>Registrirana vozila</h3>
+        </div>
+        <div class="vehicle-list" id="vehicleList"></div>
+      </article>
+
+      <article class="dashboard-panel premium-panel">
+        <div class="panel-heading">
+          <span class="section-tag">Statistics</span>
+          <h3>Player statistika</h3>
+        </div>
+        <div class="stat-stack" id="statList"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

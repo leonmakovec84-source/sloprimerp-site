@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLOPrimeRP | Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-shell auth-page">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+
+  <main class="auth-layout">
+    <section class="auth-brand premium-panel">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
+        <span class="brand-wordmark">SLOPrimeRP</span>
+      </a>
+      <span class="section-tag">Platform access</span>
+      <h1>Prijavi se v premium dashboard</h1>
+      <p>Dostopaj do svojega player overviewa, account linking sistema in prihodnjih platform funkcij.</p>
+      <div class="auth-feature-list">
+        <div><strong>Secure login</strong><span>Frontend in backend auth flow za account dostop.</span></div>
+        <div><strong>Character link</strong><span>Povezi svoj game character s spletnim dashboardom.</span></div>
+        <div><strong>Community hub</strong><span>Discord, novicni tok in account status na enem mestu.</span></div>
+      </div>
+    </section>
+
+    <section class="auth-card premium-panel">
+      <div class="auth-card-head">
+        <span class="section-tag">Login</span>
+        <h2>Dobrodosel nazaj</h2>
+        <p>Vnesi svoj email in geslo za dostop do SLOPrimeRP account sistema.</p>
+      </div>
+
+      <form class="auth-form" id="loginForm">
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" placeholder="ime@email.com" required>
+        </label>
+        <label>
+          <span>Geslo</span>
+          <input type="password" name="password" placeholder="Vnesi geslo" required>
+        </label>
+        <button class="button button-gold auth-submit" type="submit">Login</button>
+      </form>
+
+      <p class="form-message" id="authMessage"></p>
+
+      <div class="auth-links-row">
+        <a href="forgot-password.html">Pozabljeno geslo</a>
+        <a href="register.html">Ustvari account</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

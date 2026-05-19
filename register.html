@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLOPrimeRP | Register</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-shell auth-page">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+
+  <main class="auth-layout">
+    <section class="auth-brand premium-panel">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
+        <span class="brand-wordmark">SLOPrimeRP</span>
+      </a>
+      <span class="section-tag">Register</span>
+      <h1>Ustvari svoj platform account</h1>
+      <p>Registracija pripravi tvoj account za dashboard, character linking in prihodnje premium profile funkcije.</p>
+      <div class="auth-feature-list">
+        <div><strong>Dashboard access</strong><span>Pregled roleplay financ, sluzbe, vozil in osnovnega inventory overviewa.</span></div>
+        <div><strong>Protected area</strong><span>Varen dostop do osebnih podatkov in account povezave.</span></div>
+        <div><strong>Roleplay ecosystem</strong><span>Prvi korak v uradni SLOPrimeRP platformi.</span></div>
+      </div>
+    </section>
+
+    <section class="auth-card premium-panel">
+      <div class="auth-card-head">
+        <span class="section-tag">Create account</span>
+        <h2>Registracija</h2>
+        <p>Ustvari svoj spletni account, ki ga bos kasneje povezal s characterjem na serverju.</p>
+      </div>
+
+      <form class="auth-form" id="registerForm">
+        <label>
+          <span>Username</span>
+          <input type="text" name="username" placeholder="Tvoj username" required>
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" placeholder="ime@email.com" required>
+        </label>
+        <label>
+          <span>Geslo</span>
+          <input type="password" name="password" placeholder="Izberi geslo" required>
+        </label>
+        <button class="button button-gold auth-submit" type="submit">Register</button>
+      </form>
+
+      <p class="form-message" id="authMessage"></p>
+
+      <div class="auth-links-row">
+        <a href="login.html">Ze imam account</a>
+        <a href="forgot-password.html">Pozabljeno geslo</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

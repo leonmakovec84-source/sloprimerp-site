@@ -3,39 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SLOPrimeRP | Donacije</title>
+  <title>SLOPrimeRP | Tebex</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  >
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <div class="page-bg"></div>
-  <div class="site-shell">
-    <nav class="topbar page-topbar">
-      <a class="brand" id="brandMenuToggle" href="index.html"><img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo"><span class="brand-text"><span class="brand-main">SLOPrime</span><span class="brand-accent">RP</span></span></a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Odpri meni"><span></span><span></span><span></span></button>
-      <div class="nav-links" id="navLinks">
-        <a href="index.html">Domov</a>
-        <a href="pravila.html">Pravila</a>
-        <a href="donacije.html">Donacije</a>
+<body class="theme-shell subpage-body">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+
+  <header class="navbar dashboard-navbar">
+    <div class="container navbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
+        <span class="brand-wordmark">SLOPrimeRP</span>
+      </a>
+      <nav class="desktop-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="pravila.html" class="nav-link">Pravila</a>
+        <a href="donacije.html" class="nav-link is-active">Tebex</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="subpage-shell container">
+    <section class="subpage-hero-block premium-panel reveal is-visible">
+      <span class="section-tag">Premium store</span>
+      <h1>Tebex trgovina SLOPrimeRP</h1>
+      <p>Uradna SLOPrimeRP Tebex trgovina predstavlja premium dostop do skrbno izbranih paketov, ekskluzivnih ugodnosti in posebnih vsebin, namenjenih igralcem, ki zelijo stopiti korak pred ostale ter hkrati podpreti nadaljnji razvoj vrhunskega roleplay dozivetja.</p>
+    </section>
+
+    <section class="premium-panel tebex-block reveal is-visible">
+      <div>
+        <span class="section-tag">Official support</span>
+        <h2>Podpri ekipo in odkleni premium ponudbo</h2>
+        <p>Tebex je pripravljen kot uradna zunanja trgovina za pakete, podporo in izbrane prednosti vezane na skupnost SLOPrimeRP.</p>
       </div>
-    </nav>
-    <main class="subpage reveal is-visible">
-      <section class="subpage-hero">
-        <p class="section-kicker">Donacije</p>
-        <h1>Podpri razvoj SLOPrimeRP.</h1>
-        <p class="lead">Donacije pomagajo pri hostingu, skriptah, eventih in izboljsavah serverja.</p>
-      </section>
-      <section class="info-stack">
-        <article class="info-panel donation-panel">
-          <h3>Tebex trgovina SLOPrimeRP</h3>
-          <p>Uradna SLOPrimeRP Tebex trgovina predstavlja premium dostop do skrbno izbranih paketov, ekskluzivnih ugodnosti in posebnih vsebin, namenjenih igralcem, ki zelijo stopiti korak pred ostale ter hkrati podpreti nadaljnji razvoj vrhunskega roleplay dozivetja.</p>
-          <a class="button button-primary donation-button" id="tebexLink" href="https://YOUR_TEBEX_LINK" target="_blank" rel="noreferrer">Odpri Tebex trgovino</a>
-        </article>
-      </section>
-    </main>
-  </div>
+      <a class="button button-gold" id="tebexLink" href="#" target="_blank" rel="noreferrer">Odpri Tebex trgovino</a>
+    </section>
+  </main>
+
   <script src="config.js"></script>
   <script src="script.js"></script>
 </body>

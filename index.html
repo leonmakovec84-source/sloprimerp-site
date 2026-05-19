@@ -3,120 +3,338 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SLOPrimeRP | FiveM Roleplay Server</title>
+  <title>SLOPrimeRP | Premium FiveM Platform</title>
   <meta
     name="description"
-    content="SLOPrimeRP je slovenski FiveM roleplay server z aktivnimi frakcijami, pravili, donacijami, novicami in live status prikazom."
+    content="SLOPrimeRP je premium slovenska FiveM platforma z modernim dashboardom, cinematic vstopno stranjo, live statusom in premium roleplay izkusnjo."
   >
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
     rel="stylesheet"
   >
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <div class="page-bg"></div>
+<body class="theme-shell">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
 
-  <div class="site-shell">
-    <header class="hero hero-with-sidebar" id="domov">
-      <div class="hero-lights" aria-hidden="true">
-        <span class="light light-blue"></span>
-        <span class="light light-red"></span>
-      </div>
-      <div class="hero-atmosphere" aria-hidden="true">
-        <span class="fog fog-one"></span>
-        <span class="fog fog-two"></span>
-        <span class="spark spark-one"></span>
-        <span class="spark spark-two"></span>
-        <span class="spark spark-three"></span>
-      </div>
+  <header class="navbar" id="topbar">
+    <div class="container navbar-inner">
+      <a class="brand" href="index.html" aria-label="SLOPrimeRP domov">
+        <img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
+        <span class="brand-wordmark">SLOPrimeRP</span>
+      </a>
 
-      <nav class="topbar hero-sidebar">
-        <details class="brand-dropdown">
-          <summary class="brand brand-menu-button" aria-label="Odpri meni SLOPrimeRP">
-            <img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
-            <span class="brand-text">
-              <span class="brand-main">SLOPrime</span><span class="brand-accent">RP</span>
-            </span>
-          </summary>
-
-          <div class="brand-dropdown-menu">
-            <a href="index.html">Domov</a>
-            <a href="pravila.html" target="_blank" rel="noreferrer">Pravila</a>
-            <a href="donacije.html" target="_blank" rel="noreferrer">Donacije</a>
-          </div>
-        </details>
+      <nav class="desktop-nav" aria-label="Glavna navigacija">
+        <a href="#domov" class="nav-link is-active">Home</a>
+        <a href="#status" class="nav-link">Status</a>
+        <a href="#how-to-play" class="nav-link">Kako zaceti</a>
+        <a href="#community" class="nav-link">Community</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="pravila.html" class="nav-link">Pravila</a>
+        <a href="donacije.html" class="nav-link">Tebex</a>
       </nav>
 
-      <div class="hero-content reveal" data-depth="0.18">
-        <p class="hero-kicker" id="heroBadge">Roleplay server</p>
-        <button class="welcome-pill" type="button">Dobrodosli na SLOPrimeRP</button>
-        <h1 id="heroTitle">VSTOPI V SLOPRIME MESTO</h1>
-        <p class="hero-subtitle" id="heroSubtitle">Tvoja zgodba. Tvoja pravila. Tvoj dom.</p>
+      <div class="navbar-actions">
+        <a class="ghost-link" href="login.html">Login</a>
+        <button class="menu-button" id="menuButton" type="button" aria-label="Odpri meni">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-        <div class="hero-actions">
-          <a class="button button-discord" id="heroDiscordLink" href="#" target="_blank" rel="noreferrer">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M20.3 4.37A17.4 17.4 0 0 0 16.06 3a12 12 0 0 0-.54 1.1 16.18 16.18 0 0 0-7.04 0A12 12 0 0 0 7.94 3a17.4 17.4 0 0 0-4.24 1.37C1.02 8.37.3 12.27.66 16.11a17.6 17.6 0 0 0 5.2 2.63c.42-.57.8-1.18 1.13-1.82-.62-.23-1.22-.52-1.78-.86.15-.11.3-.23.44-.35 3.44 1.6 7.17 1.6 10.57 0 .15.12.29.24.44.35-.57.34-1.16.63-1.78.86.33.64.71 1.25 1.13 1.82a17.6 17.6 0 0 0 5.2-2.63c.42-4.46-.72-8.32-3.91-11.74ZM8.58 13.79c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Zm6.84 0c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Z"
-              ></path>
-            </svg>
-            Discord
-          </a>
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-panel">
+      <div class="mobile-menu-top">
+        <span class="mobile-menu-title">Navigation</span>
+        <button class="menu-close" id="menuClose" type="button" aria-label="Zapri meni">+</button>
+      </div>
+      <a href="#domov" class="mobile-menu-link">Home</a>
+      <a href="#status" class="mobile-menu-link">Status</a>
+      <a href="#how-to-play" class="mobile-menu-link">Kako zaceti</a>
+      <a href="#community" class="mobile-menu-link">Community</a>
+      <a href="dashboard.html" class="mobile-menu-link">Dashboard</a>
+      <a href="pravila.html" class="mobile-menu-link">Pravila</a>
+      <a href="donacije.html" class="mobile-menu-link">Tebex</a>
+      <a href="login.html" class="mobile-menu-link">Login</a>
+      <a href="register.html" class="mobile-menu-link">Register</a>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero-section" id="domov">
+      <div class="hero-backdrop">
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <span class="section-tag" id="heroBadge">Luxury Slovenian roleplay platform</span>
+          <h1 id="heroTitle">PREMIUM ROLEPLAY EKOSISTEM ZA NASLEDNJO GENERACIJO</h1>
+          <p class="hero-text" id="heroSubtitle">
+            Cinematic FiveM izkusnja, mocna skupnost in dashboard, ki deluje kot prava gaming platforma.
+          </p>
+
+          <div class="hero-buttons">
+            <a class="button button-gold" id="connectLink" href="#" target="_blank" rel="noreferrer">Connect</a>
+            <a class="button button-dark" id="discordLink" href="#" target="_blank" rel="noreferrer">Join Discord</a>
+            <a class="button button-ghost" href="login.html">Login</a>
+            <a class="button button-ghost" href="register.html">Register</a>
+          </div>
+
+          <div class="hero-metrics">
+            <article class="metric-card">
+              <span>Experience</span>
+              <strong>Premium RP</strong>
+            </article>
+            <article class="metric-card">
+              <span>Community</span>
+              <strong>Active Discord</strong>
+            </article>
+            <article class="metric-card">
+              <span>Platform</span>
+              <strong>Dashboard Ready</strong>
+            </article>
+          </div>
+        </div>
+
+        <aside class="hero-side reveal" id="status">
+          <article class="status-card premium-panel">
+            <div class="panel-topline">
+              <span class="section-tag">Server status</span>
+              <span class="live-pill"><span class="live-dot" id="statusDot"></span><span id="server-status">Nalagam...</span></span>
+            </div>
+            <div class="status-value">
+              <span>Igralci online</span>
+              <strong id="server-players">-- / --</strong>
+            </div>
+            <div class="status-meta">
+              <div>
+                <span>Server IP</span>
+                <strong id="server-ip">31.56.25.244:30120</strong>
+              </div>
+              <div>
+                <span>Discord</span>
+                <strong>SLOPrimeRP Hub</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="dashboard-preview premium-panel">
+            <span class="section-tag">Dashboard access</span>
+            <h2>Prijavi se in odpri svoj account panel.</h2>
+            <p>Pregled denarja, banke, sluzbe, vozil, inventarja, statistike in povezave characterja na enem mestu.</p>
+            <a class="inline-action" href="dashboard.html">Odpri dashboard</a>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="container">
+        <div class="section-intro reveal">
+          <span class="section-tag">How to play</span>
+          <h2>Kako zaceti svojo SLOPrimeRP zgodbo</h2>
+          <p>Celoten vstop na platformo je postavljen enostavno, premium in jasno za nove igralce.</p>
+        </div>
+
+        <div class="steps-grid" id="how-to-play">
+          <article class="step-card premium-panel reveal">
+            <span class="step-number">01</span>
+            <h3>Kupi GTA V</h3>
+            <p>Potrebujes originalno licencirano kopijo GTA V preko Steam, Epic ali Rockstar platforme.</p>
+            <a href="https://store.steampowered.com/app/271590/Grand_Theft_Auto_V/" target="_blank" rel="noreferrer">Odpri GTA V</a>
+          </article>
+          <article class="step-card premium-panel reveal">
+            <span class="step-number">02</span>
+            <h3>Namesti FiveM</h3>
+            <p>FiveM je platforma, prek katere dostopas do custom RP serverjev, vkljucno s SLOPrimeRP.</p>
+            <a href="https://fivem.net/" target="_blank" rel="noreferrer">Prenesi FiveM</a>
+          </article>
+          <article class="step-card premium-panel reveal">
+            <span class="step-number">03</span>
+            <h3>Registriraj racun</h3>
+            <p>Ustvari svoj account, da odklenes dashboard, account linking in prihodnje premium funkcije platforme.</p>
+            <a href="register.html">Ustvari account</a>
+          </article>
+          <article class="step-card premium-panel reveal">
+            <span class="step-number">04</span>
+            <h3>Povezi se na server</h3>
+            <p>Po registraciji odpres Discord, spremljas objave in z enim klikom dostopas do connect povezave.</p>
+            <a id="connectLinkStep" href="#" target="_blank" rel="noreferrer">Odpri povezavo</a>
+          </article>
         </div>
       </div>
-    </header>
+    </section>
 
-    <main class="content-grid" id="dobrodosel">
-      <aside class="status-panel reveal" data-depth="0.1">
-        <h2>Stanje serverja</h2>
-
-        <div class="status-item">
-          <span>Status</span>
-          <strong id="server-status" class="status-loading">Nalagam...</strong>
+    <section class="section-shell community-shell" id="community">
+      <div class="container community-grid">
+        <div class="community-copy reveal">
+          <span class="section-tag">Community first</span>
+          <h2 id="communityTitle">Skupnost, ki gradi resen roleplay</h2>
+          <p id="communityText">
+            Na SLOPrimeRP ne vstopis le na server. Vstopis v ekosistem frakcij, poslov, zgodb in igralcev, ki zelijo kakovosten dolgorocen roleplay.
+          </p>
+          <div class="community-points">
+            <div class="community-point premium-panel">
+              <strong>Luxury UI</strong>
+              <span>Premium web izkusnja, ki deluje kot prava gaming platforma.</span>
+            </div>
+            <div class="community-point premium-panel">
+              <strong>Live integration</strong>
+              <span>Status serverja, Discord novice in account dashboard v enem sistemu.</span>
+            </div>
+            <div class="community-point premium-panel">
+              <strong>Roleplay quality</strong>
+              <span>Fokus na resen RP, cist onboarding in mocno skupnostno identiteto.</span>
+            </div>
+          </div>
         </div>
 
-        <div class="status-item">
-          <span>Igralci</span>
-          <strong id="server-players">-- / --</strong>
+        <div class="dashboard-glass premium-panel reveal">
+          <div class="dashboard-top">
+            <span class="section-tag">Dashboard preview</span>
+            <a href="dashboard.html">Odpri</a>
+          </div>
+          <div class="dashboard-hero-line">
+            <h3>Player control center</h3>
+            <span class="mini-chip">Protected</span>
+          </div>
+          <div class="dashboard-stats">
+            <div>
+              <span>Cash</span>
+              <strong>$ 24,500</strong>
+            </div>
+            <div>
+              <span>Bank</span>
+              <strong>$ 148,200</strong>
+            </div>
+            <div>
+              <span>Job</span>
+              <strong>Police Sergeant</strong>
+            </div>
+            <div>
+              <span>Cars</span>
+              <strong>6 Owned</strong>
+            </div>
+          </div>
+          <div class="dashboard-table">
+            <div class="dashboard-row">
+              <span>Inventory sync</span>
+              <strong>Ready</strong>
+            </div>
+            <div class="dashboard-row">
+              <span>Account link</span>
+              <strong>Secure token</strong>
+            </div>
+            <div class="dashboard-row">
+              <span>Profile stats</span>
+              <strong>Live overview</strong>
+            </div>
+          </div>
         </div>
-      </aside>
+      </div>
+    </section>
 
-      <section class="main-panel reveal" data-depth="0.08">
-        <div class="section-header">
-          <p class="section-kicker">Dobrodosel doma</p>
-          <h2 id="serverDescription">SLOPrimeRP je prostor za resen roleplay in mocno slovensko skupnost.</h2>
+    <section class="section-shell">
+      <div class="container">
+        <div class="section-intro reveal">
+          <span class="section-tag">Discord hub</span>
+          <h2>Ostanes v stiku z vsako vecjo posodobitvijo</h2>
+          <p>Discord je glavni komunikacijski center za novice, support, prijave, evente in dnevne objave skupnosti.</p>
         </div>
 
-        <p class="lead">
-          Tukaj nisi samo igralec. Tukaj gradis identiteto, odnose, posel, ugled in zgodbo,
-          ki ostane. Stran je pripravljena tako, da lahko live bere igralce, status, IP,
-          Discord povezavo in join link iz FiveM hosta.
-        </p>
+        <div class="discord-grid">
+          <article class="discord-card premium-panel reveal">
+            <div>
+              <span class="section-tag">Community</span>
+              <h3>Discord gateway za SLOPrimeRP</h3>
+              <p>Pridruzi se aktivnemu community hubu, spremljaj objave osebja, social media creatorje in server news feed.</p>
+            </div>
+            <div class="discord-actions">
+              <a class="button button-discord" id="discordSectionLink" href="#" target="_blank" rel="noreferrer">Join Discord</a>
+              <a class="button button-ghost" href="login.html">Odpri account</a>
+            </div>
+          </article>
 
-        <div class="cta-panel" id="kontakt-panel">
+          <article class="discord-widget premium-panel reveal">
+            <span class="section-tag">Server pulse</span>
+            <div class="widget-rows">
+              <div class="widget-row">
+                <span>Announcements</span>
+                <strong>Live</strong>
+              </div>
+              <div class="widget-row">
+                <span>Support access</span>
+                <strong>Open</strong>
+              </div>
+              <div class="widget-row">
+                <span>Creator zone</span>
+                <strong>Enabled</strong>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-shell gallery-shell">
+      <div class="container">
+        <div class="section-intro reveal">
+          <span class="section-tag">Gallery</span>
+          <h2>Cinematic platform mood</h2>
+          <p>Vizualni jezik strani je postavljen kot premium FiveM platforma z cinematic grid pristopom.</p>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="container">
+        <article class="tebex-banner premium-panel reveal">
           <div>
-            <p class="section-kicker">Kontakt</p>
-            <h3>Pridruzi se skupnosti na Discordu.</h3>
+            <span class="section-tag">Tebex</span>
+            <h2>Premium podpora za nadaljnji razvoj platforme</h2>
+            <p>Podpri ekipo SLOPrimeRP prek uradne Tebex trgovine in odkleni premium pakete, dostop in dodatne ugodnosti.</p>
           </div>
-          <div class="cta-actions">
-            <a class="button button-discord" id="bottomDiscordLink" href="#" target="_blank" rel="noreferrer">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  fill="currentColor"
-                  d="M20.3 4.37A17.4 17.4 0 0 0 16.06 3a12 12 0 0 0-.54 1.1 16.18 16.18 0 0 0-7.04 0A12 12 0 0 0 7.94 3a17.4 17.4 0 0 0-4.24 1.37C1.02 8.37.3 12.27.66 16.11a17.6 17.6 0 0 0 5.2 2.63c.42-.57.8-1.18 1.13-1.82-.62-.23-1.22-.52-1.78-.86.15-.11.3-.23.44-.35 3.44 1.6 7.17 1.6 10.57 0 .15.12.29.24.44.35-.57.34-1.16.63-1.78.86.33.64.71 1.25 1.13 1.82a17.6 17.6 0 0 0 5.2-2.63c.42-4.46-.72-8.32-3.91-11.74ZM8.58 13.79c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Zm6.84 0c-1.03 0-1.87-.94-1.87-2.08 0-1.15.83-2.08 1.87-2.08 1.05 0 1.88.94 1.87 2.08 0 1.15-.83 2.08-1.87 2.08Z"
-                ></path>
-              </svg>
-              Discord
-            </a>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
+          <a class="button button-gold" id="tebexLink" href="#" target="_blank" rel="noreferrer">Odpri Tebex</a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer-shell">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand footer-brand" href="index.html">
+          <img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
+          <span class="brand-wordmark">SLOPrimeRP</span>
+        </a>
+        <p class="footer-copy">Premium slovenska FiveM platforma za cinematic roleplay, community growth in dashboard driven uporabnisko izkusnjo.</p>
+      </div>
+      <div class="footer-links">
+        <span>Quick nav</span>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="pravila.html">Pravila</a>
+        <a href="donacije.html">Tebex</a>
+        <a href="login.html">Login</a>
+      </div>
+      <div class="footer-links">
+        <span>Community</span>
+        <a id="footerDiscordLink" href="#" target="_blank" rel="noreferrer">Discord</a>
+        <a href="#community">About</a>
+        <a href="#how-to-play">Kako zaceti</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <span>© 2026 SLOPrimeRP. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
 
   <script src="config.js"></script>
   <script src="script.js"></script>

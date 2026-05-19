@@ -1,9 +1,10 @@
 import "dotenv/config";
-import express from "express";
-import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import express from "express";
+import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,25 +14,26 @@ const port = Number(process.env.PORT || 3000);
 const newsChannelId = process.env.DISCORD_NEWS_CHANNEL_ID || "";
 const socialChannelId = process.env.DISCORD_SOCIAL_CHANNEL_ID || "";
 const botToken = process.env.DISCORD_BOT_TOKEN || "";
-const newsFilePath = path.join(__dirname, "data", "news.json");
-const socialFilePath = path.join(__dirname, "data", "social-feed.json");
 
-function ensureNewsStorage() {
-  const dataDir = path.dirname(newsFilePath);
+const dataDir = path.join(__dirname, "data");
+const newsFilePath = path.join(dataDir, "news.json");
+const socialFilePath = path.join(dataDir, "social-feed.json");
+const usersFilePath = path.join(dataDir, "users.json");
+
+function ensureStorage(filePath, fallback = "[]") {
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
   }
 
-  if (!fs.existsSync(newsFilePath)) {
-    fs.writeFileSync(newsFilePath, "[]", "utf8");
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, fallback, "utf8");
   }
 }
 
-function readNews() {
-  ensureNewsStorage();
-
+function readList(filePath) {
+  ensureStorage(filePath);
   try {
-    const raw = fs.readFileSync(newsFilePath, "utf8");
+    const raw = fs.readFileSync(filePath, "utf8");
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
   } catch {
@@ -39,50 +41,121 @@ function readNews() {
   }
 }
 
-function writeNews(items) {
-  ensureNewsStorage();
-  fs.writeFileSync(newsFilePath, JSON.stringify(items, null, 2), "utf8");
+function writeList(filePath, items) {
+  ensureStorage(filePath);
+  fs.writeFileSync(filePath, JSON.stringify(items, null, 2), "utf8");
 }
 
-function readSocialFeed() {
-  ensureNewsStorage();
+function randomToken(bytes = 24) {
+  return crypto.randomBytes(bytes).toString("hex");
+}
 
-  try {
-    if (!fs.existsSync(socialFilePath)) {
-      fs.writeFileSync(socialFilePath, "[]", "utf8");
-    }
+function hashPassword(password) {
+  return crypto.createHash("sha256").update(password).digest("hex");
+}
 
-    const raw = fs.readFileSync(socialFilePath, "utf8");
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
+function sanitizeUser(user) {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email
+  };
+}
+
+function getUsers() {
+  return readList(usersFilePath);
+}
+
+function saveUsers(users) {
+  writeList(usersFilePath, users);
+}
+
+function getNews() {
+  return readList(newsFilePath);
+}
+
+function saveNews(items) {
+  writeList(newsFilePath, items);
+}
+
+function getSocialFeed() {
+  return readList(socialFilePath);
+}
+
+function saveSocialFeed(items) {
+  writeList(socialFilePath, items);
+}
+
+function defaultDashboard(username) {
+  return {
+    playerName: username,
+    summary: "Pregled roleplay financ, vozil, inventarja in osnovnega account statusa.",
+    playerId: `SLP-${Math.floor(1000 + Math.random() * 9000)}`,
+    phone: `070 ${Math.floor(100 + Math.random() * 900)} ${Math.floor(100 + Math.random() * 900)}`,
+    money: 24500,
+    bank: 148200,
+    job: "Police Sergeant",
+    jobRank: "Rank 3",
+    linkedCharacter: false,
+    linkToken: randomToken(32),
+    inventory: [
+      { label: "Cash Wallet", value: "$ 24,500" },
+      { label: "Radio", value: "Connected" },
+      { label: "Weapons", value: "2 Registered" },
+      { label: "Keys", value: "5 Active" }
+    ],
+    vehicles: [
+      { plate: "PRIME 001", model: "Bravado Buffalo STX" },
+      { plate: "PRIME 019", model: "Vapid Scout" },
+      { plate: "PRIME 204", model: "Ubermacht Rhinehart" }
+    ],
+    stats: [
+      { label: "Hours played", value: "186h" },
+      { label: "Completed sessions", value: "74" },
+      { label: "Roleplay score", value: "High" }
+    ]
+  };
+}
+
+function createUser({ username, email, password }) {
+  return {
+    id: randomToken(8),
+    username,
+    email,
+    passwordHash: hashPassword(password),
+    sessionToken: randomToken(20),
+    dashboard: defaultDashboard(username)
+  };
+}
+
+function findUserBySession(token) {
+  if (!token) {
+    return null;
   }
+
+  return getUsers().find((user) => user.sessionToken === token) || null;
 }
 
-function writeSocialFeed(items) {
-  ensureNewsStorage();
-  fs.writeFileSync(socialFilePath, JSON.stringify(items, null, 2), "utf8");
+function getBearerToken(req) {
+  const header = req.headers.authorization || "";
+  if (!header.startsWith("Bearer ")) {
+    return "";
+  }
+
+  return header.slice(7).trim();
 }
 
-function removeNewsById(messageId) {
-  if (!messageId) {
+function requireAuth(req, res, next) {
+  const token = getBearerToken(req);
+  const user = findUserBySession(token);
+
+  if (!user) {
+    res.status(401).json({ error: "Nisi prijavljen." });
     return;
   }
 
-  const items = readNews();
-  const next = items.filter((item) => item.id !== messageId);
-  writeNews(next);
-}
-
-function removeSocialById(messageId) {
-  if (!messageId) {
-    return;
-  }
-
-  const items = readSocialFeed();
-  const next = items.filter((item) => item.id !== messageId);
-  writeSocialFeed(next);
+  req.user = user;
+  next();
 }
 
 function extractMessageContent(message) {
@@ -126,26 +199,24 @@ function mapMessage(message) {
   };
 }
 
-function upsertNewsFromMessage(message) {
-  if (!message || !message.id) {
+function upsertFeedEntry(filePath, message) {
+  if (!message?.id) {
     return;
   }
 
-  const items = readNews();
+  const items = readList(filePath);
   const entry = mapMessage(message);
   const next = [entry, ...items.filter((item) => item.id !== entry.id)].slice(0, 20);
-  writeNews(next);
+  writeList(filePath, next);
 }
 
-function upsertSocialFromMessage(message) {
-  if (!message || !message.id) {
+function removeFeedEntry(filePath, messageId) {
+  if (!messageId) {
     return;
   }
 
-  const items = readSocialFeed();
-  const entry = mapMessage(message);
-  const next = [entry, ...items.filter((item) => item.id !== entry.id)].slice(0, 20);
-  writeSocialFeed(next);
+  const items = readList(filePath);
+  writeList(filePath, items.filter((item) => item.id !== messageId));
 }
 
 async function syncLatestChannelMessages(client, channelId, writer) {
@@ -187,34 +258,34 @@ function startDiscordBot() {
 
   client.once(Events.ClientReady, async () => {
     console.log(`Discord bot ready as ${client.user?.tag}`);
-    await syncLatestChannelMessages(client, newsChannelId, writeNews);
-    await syncLatestChannelMessages(client, socialChannelId, writeSocialFeed);
+    await syncLatestChannelMessages(client, newsChannelId, saveNews);
+    await syncLatestChannelMessages(client, socialChannelId, saveSocialFeed);
   });
 
   client.on(Events.MessageCreate, (message) => {
     if (message.channelId === newsChannelId) {
-      upsertNewsFromMessage(message);
+      upsertFeedEntry(newsFilePath, message);
     }
     if (message.channelId === socialChannelId) {
-      upsertSocialFromMessage(message);
+      upsertFeedEntry(socialFilePath, message);
     }
   });
 
   client.on(Events.MessageUpdate, (_, newMessage) => {
     if (newMessage.channelId === newsChannelId) {
-      upsertNewsFromMessage(newMessage);
+      upsertFeedEntry(newsFilePath, newMessage);
     }
     if (newMessage.channelId === socialChannelId) {
-      upsertSocialFromMessage(newMessage);
+      upsertFeedEntry(socialFilePath, newMessage);
     }
   });
 
   client.on(Events.MessageDelete, (message) => {
     if (message.channelId === newsChannelId) {
-      removeNewsById(message.id);
+      removeFeedEntry(newsFilePath, message.id);
     }
     if (message.channelId === socialChannelId) {
-      removeSocialById(message.id);
+      removeFeedEntry(socialFilePath, message.id);
     }
   });
 
@@ -223,17 +294,97 @@ function startDiscordBot() {
   });
 }
 
-ensureNewsStorage();
+ensureStorage(newsFilePath);
+ensureStorage(socialFilePath);
+ensureStorage(usersFilePath);
 startDiscordBot();
 
+app.use(express.json());
 app.use(express.static(__dirname));
 
+app.post("/api/auth/register", (req, res) => {
+  const { username, email, password } = req.body || {};
+
+  if (!username || !email || !password) {
+    res.status(400).json({ error: "Manjkajo podatki za registracijo." });
+    return;
+  }
+
+  const users = getUsers();
+  const exists = users.some((user) => user.email.toLowerCase() === String(email).toLowerCase());
+  if (exists) {
+    res.status(409).json({ error: "Account s tem emailom ze obstaja." });
+    return;
+  }
+
+  const user = createUser({ username, email, password });
+  users.push(user);
+  saveUsers(users);
+
+  res.json({
+    token: user.sessionToken,
+    user: sanitizeUser(user)
+  });
+});
+
+app.post("/api/auth/login", (req, res) => {
+  const { email, password } = req.body || {};
+  const passwordHash = hashPassword(password || "");
+  const users = getUsers();
+  const user = users.find((entry) =>
+    entry.email.toLowerCase() === String(email).toLowerCase() && entry.passwordHash === passwordHash
+  );
+
+  if (!user) {
+    res.status(401).json({ error: "Napacen email ali geslo." });
+    return;
+  }
+
+  user.sessionToken = randomToken(20);
+  saveUsers(users);
+
+  res.json({
+    token: user.sessionToken,
+    user: sanitizeUser(user)
+  });
+});
+
+app.post("/api/auth/forgot-password", (req, res) => {
+  const email = req.body?.email;
+  if (!email) {
+    res.status(400).json({ error: "Email je obvezen." });
+    return;
+  }
+
+  res.json({
+    message: "Reset flow je pripravljen kot osnova. V produkciji ga priklopiva na pravi mail sistem."
+  });
+});
+
+app.get("/api/dashboard/overview", requireAuth, (req, res) => {
+  res.json(req.user.dashboard);
+});
+
+app.post("/api/account/regenerate-link-token", requireAuth, (req, res) => {
+  const users = getUsers();
+  const user = users.find((entry) => entry.id === req.user.id);
+  if (!user) {
+    res.status(404).json({ error: "Uporabnik ni najden." });
+    return;
+  }
+
+  user.dashboard.linkToken = randomToken(32);
+  saveUsers(users);
+
+  res.json({ linkToken: user.dashboard.linkToken });
+});
+
 app.get("/api/news", (_req, res) => {
-  res.json({ items: readNews() });
+  res.json({ items: getNews() });
 });
 
 app.get("/api/social-feed", (_req, res) => {
-  res.json({ items: readSocialFeed() });
+  res.json({ items: getSocialFeed() });
 });
 
 app.listen(port, () => {

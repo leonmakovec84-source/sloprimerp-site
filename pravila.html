@@ -6,49 +6,59 @@
   <title>SLOPrimeRP | Pravila</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  >
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <div class="page-bg"></div>
-  <div class="site-shell">
-    <nav class="topbar page-topbar">
-      <a class="brand" id="brandMenuToggle" href="index.html"><img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo"><span class="brand-text"><span class="brand-main">SLOPrime</span><span class="brand-accent">RP</span></span></a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Odpri meni"><span></span><span></span><span></span></button>
-      <div class="nav-links" id="navLinks">
-        <a href="index.html">Domov</a>
-        <a href="pravila.html">Pravila</a>
-        <a href="donacije.html">Donacije</a>
-      </div>
-    </nav>
-    <main class="subpage reveal is-visible">
-      <section class="subpage-hero">
-        <p class="section-kicker">Pravila</p>
-        <h1>Osnova pravila roleplaya.</h1>
-      </section>
-      <section class="info-stack">
-        <article class="info-panel rules-panel">
-          <h3>SLOPrime streznik / server pravila</h3>
-          <ul class="rules-list">
-            <li><strong>Metagaming</strong> - Uporaba out of character informacij v in character namene.</li>
-            <li><strong>Powergaming</strong> - Izvajanje dejanj, ki jih v pravem zivljenju ni mogoce.</li>
-            <li><strong>RDM</strong> - Ubijanje ljudi brez tehtnega razloga.</li>
-            <li><strong>VDM</strong> - Ubijanje ljudi brez tehtnega razloga s pomocjo vozila.</li>
-            <li><strong>Combat Log</strong> - Izhod iz streznika med roleplay situacijo.</li>
-            <li><strong>New Life Rule</strong> - Ob smrti se ne smes spomniti zadnjih 30 minut oziroma zadnje RP situacije.</li>
-            <li><strong>GFA</strong> - Iz zraka potegniti orozje vecjega kalibra. Orozje lahko vzames iz torbe, ce uporabis komando <code>/me</code>.</li>
-            <li><strong>Bug Abuse</strong> - Izkoriscanje bugov ali glitchov v katere koli namene.</li>
-            <li><strong>Lokacije</strong> - Preprodaja lokacij v chat. Prodajas jih lahko samo preko roleplaya z voice komunikacijo.</li>
-            <li><strong>Cop Bait</strong> - Izvajanje prekrskov pred policisti v provokacijske namene.</li>
-            <li><strong>Fear RP</strong> - Ne sme ti biti vseeno za svoje zivljenje.</li>
-            <li><strong>OOC</strong> - Govorjenje OOC brez dovoljenja osebja je strogo prepovedano.</li>
-            <li><strong>Scamming</strong> - Scammanje je dovoljeno le do 5.000 EUR.</li>
-            <li><strong>Safezone</strong> - V varnih obmocjih oziroma safezone je prepovedano napadati ali ropati druge igralce.</li>
-          </ul>
-        </article>
-      </section>
-    </main>
-  </div>
+<body class="theme-shell subpage-body">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+
+  <header class="navbar dashboard-navbar">
+    <div class="container navbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/logo_2.png" alt="SLOPrimeRP logo">
+        <span class="brand-wordmark">SLOPrimeRP</span>
+      </a>
+      <nav class="desktop-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="pravila.html" class="nav-link is-active">Pravila</a>
+        <a href="donacije.html" class="nav-link">Tebex</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="subpage-shell container">
+    <section class="subpage-hero-block premium-panel reveal is-visible">
+      <span class="section-tag">Server rules</span>
+      <h1>SLOPrimeRP pravila</h1>
+      <p>Jasna pravila za resen roleplay, stabilno skupnost in kakovostno izkusnjo za vse igralce.</p>
+    </section>
+
+    <section class="premium-panel rules-block reveal is-visible">
+      <ul class="rules-list">
+        <li><strong>Metagaming</strong> Uporaba out of character informacij v in character namene.</li>
+        <li><strong>Powergaming</strong> Izvajanje dejanj, ki jih v pravem zivljenju ni mogoce.</li>
+        <li><strong>RDM</strong> Ubijanje ljudi brez tehtnega razloga.</li>
+        <li><strong>VDM</strong> Ubijanje ljudi brez tehtnega razloga s pomocjo vozila.</li>
+        <li><strong>Combat Log</strong> Izhod iz streznika med roleplay situacijo.</li>
+        <li><strong>New Life Rule</strong> Ob smrti se ne smes spomniti zadnjih 30 minut oziroma zadnje RP situacije.</li>
+        <li><strong>GFA</strong> Iz zraka potegniti orozje vecjega kalibra. Orozje lahko vzames iz torbe, ce uporabis komando <code>/me</code>.</li>
+        <li><strong>Bug Abuse</strong> Izkoriscanje bugov ali glitchov v katere koli namene.</li>
+        <li><strong>Lokacije</strong> Preprodaja lokacij v chat. Prodajas jih lahko samo preko roleplaya z voice komunikacijo.</li>
+        <li><strong>Cop Bait</strong> Izvajanje prekrskov pred policisti v provokacijske namene.</li>
+        <li><strong>Fear RP</strong> Ne sme ti biti vseeno za svoje zivljenje.</li>
+        <li><strong>OOC</strong> Govorjenje OOC brez dovoljenja osebja je strogo prepovedano.</li>
+        <li><strong>Scamming</strong> Scammanje je dovoljeno le do 5.000 EUR.</li>
+        <li><strong>Safezone</strong> V varnih obmocjih oziroma safezone je prepovedano napadati ali ropati druge igralce.</li>
+      </ul>
+    </section>
+  </main>
+
   <script src="config.js"></script>
   <script src="script.js"></script>
 </body>
