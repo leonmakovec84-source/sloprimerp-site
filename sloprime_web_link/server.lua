@@ -36,7 +36,17 @@ RegisterCommand("link", function(source, args)
         return
     end
 
-    local endpoint = string.format("%s%s", Config.ApiBaseUrl, Config.LinkEndpoint)
+    local baseUrl = tostring(Config.ApiBaseUrl or ""):gsub("/+$", "")
+    local linkEndpoint = tostring(Config.LinkEndpoint or "")
+    if linkEndpoint == "" then
+        linkEndpoint = "/api/game/link"
+    end
+
+    if linkEndpoint:sub(1, 1) ~= "/" then
+        linkEndpoint = "/" .. linkEndpoint
+    end
+
+    local endpoint = string.format("%s%s", baseUrl, linkEndpoint)
     local payload = json.encode({
         token = token,
         identifier = identifier
