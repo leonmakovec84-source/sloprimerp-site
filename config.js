@@ -1,14 +1,14 @@
 window.SLOPRIME_CONFIG = {
   branding: {
     serverName: "SLOPrimeRP",
-    heroBadge: "Luxury Slovenian roleplay platform",
-    heroTitle: "PREMIUM ROLEPLAY EKOSISTEM ZA NASLEDNJO GENERACIJO",
-    heroSubtitle: "Cinematic FiveM izkusnja, mocna skupnost in dashboard, ki deluje kot prava gaming platforma.",
+    heroBadge: "Slovenska premium FiveM roleplay skupnost",
+    heroTitle: "URADNA SPLETNA PLATFORMA SLOPRIMERP",
+    heroSubtitle: "Resen roleplay, mocna skupnost in sodoben dashboard sistem za igralce SLOPrimeRP.",
     description:
-      "SLOPrimeRP zdruzuje resen roleplay, premium uporabnisko izkusnjo in mocno skupnost v enem modernem FiveM okolju.",
-    communityTitle: "Skupnost, ki gradi resen roleplay",
+      "SLOPrimeRP zdruzuje resen roleplay, pregledno spletno platformo in povezavo s serverjem v enoten sistem za celotno skupnost.",
+    communityTitle: "Skupnost, ki gradi dolgorozen roleplay",
     communityText:
-      "Na SLOPrimeRP ne vstopis le na server. Vstopis v ekosistem frakcij, poslov, zgodb in igralcev, ki zelijo kakovosten dolgorocen roleplay."
+      "Na SLOPrimeRP ne vstopis le na server. Vstopis v skupnost frakcij, poslov, zgodb in igralcev, ki zelijo kakovosten, urejen in dolgorocen roleplay."
   },
   links: {
     discord: "https://discord.gg/MtqmHJDR",
@@ -17,7 +17,7 @@ window.SLOPRIME_CONFIG = {
     tebex: "",
     socials: {
       instagram: "#",
-      tiktok: "https://vm.tiktok.com/ZNRtFGMjq/",
+      tiktok: "#https://vm.tiktok.com/ZNRtFGMjq/",
       youtube: "#"
     }
   },
@@ -29,6 +29,10 @@ window.SLOPRIME_CONFIG = {
   },
   auth: {
     demoMode: false
+  },
+  webLink: {
+    command: "/link",
+    helpText: "Po registraciji v igri uporabi /link TOKEN za povezavo accounta s spletno stranjo."
   },
   gallery: [
     {

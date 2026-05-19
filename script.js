@@ -107,6 +107,7 @@ function initReveal() {
 function applyBranding() {
   const branding = config.branding || {};
   const links = config.links || {};
+  const webLink = config.webLink || {};
 
   setText(document.getElementById("heroBadge"), branding.heroBadge);
   setText(document.getElementById("heroTitle"), branding.heroTitle);
@@ -120,6 +121,7 @@ function applyBranding() {
   setHref(document.getElementById("connectLinkStep"), links.join || "#");
   setHref(document.getElementById("tebexLink"), links.tebex || "#");
   setText(document.getElementById("server-ip"), links.websiteIpText || "--");
+  setText(document.getElementById("linkHelpText"), webLink.helpText || "");
 }
 
 function renderGallery() {
@@ -299,7 +301,10 @@ async function loadDashboard() {
     setText(document.getElementById("dashboardJob"), profile.job);
     setText(document.getElementById("dashboardJobRank"), profile.jobRank);
     setText(document.getElementById("linkTokenValue"), profile.linkToken);
-    setText(document.getElementById("linkTokenCommand"), `/link ${profile.linkToken}`);
+    setText(
+      document.getElementById("linkTokenCommand"),
+      `${config.webLink?.command || "/link"} ${profile.linkToken}`
+    );
     setText(
       document.getElementById("accountLinkTitle"),
       profile.linkedCharacter ? "Account Linked" : "Account Not Linked"
@@ -361,7 +366,10 @@ async function regenerateLinkToken() {
     });
 
     setText(document.getElementById("linkTokenValue"), data.linkToken);
-    setText(document.getElementById("linkTokenCommand"), `/link ${data.linkToken}`);
+    setText(
+      document.getElementById("linkTokenCommand"),
+      `${config.webLink?.command || "/link"} ${data.linkToken}`
+    );
   } catch (error) {
     console.error(error);
   }
