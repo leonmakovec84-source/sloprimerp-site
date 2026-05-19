@@ -14,11 +14,15 @@ const port = Number(process.env.PORT || 3000);
 const newsChannelId = process.env.DISCORD_NEWS_CHANNEL_ID || "";
 const socialChannelId = process.env.DISCORD_SOCIAL_CHANNEL_ID || "";
 const botToken = process.env.DISCORD_BOT_TOKEN || "";
+const mysqlConnectionString = process.env.MYSQL_CONNECTION_STRING || "";
+const usersTableName = process.env.FIVEM_USERS_TABLE || "users";
+const vehiclesTableName = process.env.FIVEM_VEHICLES_TABLE || "owned_vehicles";
 
 const dataDir = path.join(__dirname, "data");
 const newsFilePath = path.join(dataDir, "news.json");
 const socialFilePath = path.join(dataDir, "social-feed.json");
 const usersFilePath = path.join(dataDir, "users.json");
+let mysqlPool = null;
 
 function ensureStorage(filePath, fallback = "[]") {
   if (!fs.existsSync(dataDir)) {
@@ -52,6 +56,81 @@ function randomToken(bytes = 24) {
 
 function hashPassword(password) {
   return crypto.createHash("sha256").update(password).digest("hex");
+}
+
+function safeJsonParse(value, fallback) {
+  if (!value) {
+    return fallback;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
+function parseMysqlConnectionString(connectionString) {
+  if (!connectionString) {
+    return null;
+  }
+
+  const normalized = connectionString
+    .replace(/^set\s+mysql_connection_string\s+/i, "")
+    .replace(/^mysql_connection_string\s+/i, "")
+    .replace(/^["']|["']$/g, "");
+
+  const parts = normalized.split(";").map((part) => part.trim()).filter(Boolean);
+  const mapped = {};
+
+  for (const part of parts) {
+    const [rawKey, ...rawValue] = part.split("=");
+    if (!rawKey || !rawValue.length) {
+      continue;
+    }
+
+    mapped[rawKey.trim().toLowerCase()] = rawValue.join("=").trim();
+  }
+
+  return {
+    host: mapped.server || mapped.host || "127.0.0.1",
+    user: mapped.uid || mapped.user || mapped.username || "",
+    password: mapped.password || "",
+    database: mapped.database || mapped.db || "",
+    port: Number(mapped.port || 3306)
+  };
+}
+
+async function getMysqlPool() {
+  if (mysqlPool !== null) {
+    return mysqlPool;
+  }
+
+  if (!mysqlConnectionString) {
+    mysqlPool = null;
+    return mysqlPool;
+  }
+
+  try {
+    const mysql = await import("mysql2/promise");
+    const parsed = parseMysqlConnectionString(mysqlConnectionString);
+    if (!parsed?.host || !parsed?.user || !parsed?.database) {
+      mysqlPool = null;
+      return mysqlPool;
+    }
+
+    mysqlPool = mysql.createPool({
+      ...parsed,
+      waitForConnections: true,
+      connectionLimit: 5,
+      queueLimit: 0
+    });
+    return mysqlPool;
+  } catch (error) {
+    console.error("MySQL init failed:", error.message);
+    mysqlPool = null;
+    return mysqlPool;
+  }
 }
 
 function sanitizeUser(user) {
@@ -89,30 +168,26 @@ function saveSocialFeed(items) {
 function defaultDashboard(username) {
   return {
     playerName: username,
-    summary: "Pregled roleplay financ, vozil, inventarja in osnovnega account statusa.",
-    playerId: `SLP-${Math.floor(1000 + Math.random() * 9000)}`,
-    phone: `070 ${Math.floor(100 + Math.random() * 900)} ${Math.floor(100 + Math.random() * 900)}`,
-    money: 24500,
-    bank: 148200,
-    job: "Police Sergeant",
-    jobRank: "Rank 3",
+    summary: "Account je ustvarjen. Naslednji korak je povezava characterja iz igre za live dashboard podatke.",
+    playerId: "--",
+    phone: "--",
+    money: null,
+    bank: null,
+    job: "Ni povezano",
+    jobRank: "Ni povezano",
     linkedCharacter: false,
     linkToken: randomToken(32),
     inventory: [
-      { label: "Cash Wallet", value: "$ 24,500" },
-      { label: "Radio", value: "Connected" },
-      { label: "Weapons", value: "2 Registered" },
-      { label: "Keys", value: "5 Active" }
+      { label: "Inventory sync", value: "Povezi account" },
+      { label: "Job sync", value: "Caka na /link" },
+      { label: "Character state", value: "Unlinked" },
+      { label: "Dashboard access", value: "Basic" }
     ],
-    vehicles: [
-      { plate: "PRIME 001", model: "Bravado Buffalo STX" },
-      { plate: "PRIME 019", model: "Vapid Scout" },
-      { plate: "PRIME 204", model: "Ubermacht Rhinehart" }
-    ],
+    vehicles: [],
     stats: [
-      { label: "Hours played", value: "186h" },
-      { label: "Completed sessions", value: "74" },
-      { label: "Roleplay score", value: "High" }
+      { label: "Link status", value: "Pending" },
+      { label: "Database sync", value: "Waiting" },
+      { label: "Platform state", value: "Ready" }
     ]
   };
 }
@@ -124,6 +199,8 @@ function createUser({ username, email, password }) {
     email,
     passwordHash: hashPassword(password),
     sessionToken: randomToken(20),
+    linkedIdentifier: "",
+    lastLinkedAt: "",
     dashboard: defaultDashboard(username)
   };
 }
@@ -134,6 +211,108 @@ function findUserBySession(token) {
   }
 
   return getUsers().find((user) => user.sessionToken === token) || null;
+}
+
+function normalizeDashboardValue(value, fallback = "--") {
+  if (value === null || value === undefined || value === "") {
+    return fallback;
+  }
+
+  return value;
+}
+
+async function getLiveDashboardForUser(user) {
+  const pool = await getMysqlPool();
+  if (!pool || !user.linkedIdentifier) {
+    return null;
+  }
+
+  try {
+    const [userRows] = await pool.query(
+      `SELECT identifier, firstname, lastname, money, bank, job, job_grade, accounts, inventory FROM \`${usersTableName}\` WHERE identifier = ? LIMIT 1`,
+      [user.linkedIdentifier]
+    );
+
+    const playerRow = userRows?.[0];
+    if (!playerRow) {
+      return null;
+    }
+
+    const [vehicleRows] = await pool.query(
+      `SELECT plate, vehicle FROM \`${vehiclesTableName}\` WHERE owner = ? LIMIT 12`,
+      [user.linkedIdentifier]
+    );
+
+    const accounts = Array.isArray(playerRow.accounts)
+      ? playerRow.accounts
+      : safeJsonParse(playerRow.accounts, []);
+
+    const inventory = Array.isArray(playerRow.inventory)
+      ? playerRow.inventory
+      : safeJsonParse(playerRow.inventory, []);
+
+    const cashFromAccounts = Array.isArray(accounts)
+      ? Number(accounts.find((entry) => entry.name === "money")?.money || 0)
+      : 0;
+
+    const bankFromAccounts = Array.isArray(accounts)
+      ? Number(accounts.find((entry) => entry.name === "bank")?.money || 0)
+      : 0;
+
+    const inventoryPreview = Array.isArray(inventory)
+      ? inventory
+          .filter((item) => Number(item?.count || item?.amount || 0) > 0)
+          .slice(0, 4)
+          .map((item) => ({
+            label: item.label || item.name || "Item",
+            value: String(item.count || item.amount || 0)
+          }))
+      : [];
+
+    const vehiclesPreview = Array.isArray(vehicleRows)
+      ? vehicleRows.slice(0, 6).map((entry) => {
+          const vehicleData = safeJsonParse(entry.vehicle, {});
+          return {
+            plate: entry.plate || "NO PLATE",
+            model: vehicleData.model || vehicleData.name || "Registered Vehicle"
+          };
+        })
+      : [];
+
+    const fullName = [playerRow.firstname, playerRow.lastname].filter(Boolean).join(" ").trim();
+
+    return {
+      playerName: fullName || user.username,
+      summary: "Dashboard je povezan s FiveM accountom in prikazuje live podatke iz baze.",
+      playerId: normalizeDashboardValue(playerRow.identifier),
+      phone: normalizeDashboardValue(playerRow.phone_number || playerRow.phone),
+      money: Number(playerRow.money ?? cashFromAccounts ?? 0),
+      bank: Number(playerRow.bank ?? bankFromAccounts ?? 0),
+      job: normalizeDashboardValue(playerRow.job, "Unassigned"),
+      jobRank: `Grade ${normalizeDashboardValue(playerRow.job_grade, 0)}`,
+      linkedCharacter: true,
+      linkToken: user.dashboard.linkToken,
+      inventory: inventoryPreview.length
+        ? inventoryPreview
+        : [
+            { label: "Inventory", value: "Ni podatkov" },
+            { label: "Sync state", value: "Linked" }
+          ],
+      vehicles: vehiclesPreview.length
+        ? vehiclesPreview
+        : [
+            { plate: "NO DATA", model: "Ni registriranih vozil" }
+          ],
+      stats: [
+        { label: "Link status", value: "Linked" },
+        { label: "Database sync", value: "Live" },
+        { label: "Owned vehicles", value: String(Array.isArray(vehicleRows) ? vehicleRows.length : 0) }
+      ]
+    };
+  } catch (error) {
+    console.error("Live dashboard query failed:", error.message);
+    return null;
+  }
 }
 
 function getBearerToken(req) {
@@ -362,7 +541,13 @@ app.post("/api/auth/forgot-password", (req, res) => {
 });
 
 app.get("/api/dashboard/overview", requireAuth, (req, res) => {
-  res.json(req.user.dashboard);
+  getLiveDashboardForUser(req.user)
+    .then((liveDashboard) => {
+      res.json(liveDashboard || req.user.dashboard);
+    })
+    .catch(() => {
+      res.json(req.user.dashboard);
+    });
 });
 
 app.post("/api/account/regenerate-link-token", requireAuth, (req, res) => {
@@ -377,6 +562,32 @@ app.post("/api/account/regenerate-link-token", requireAuth, (req, res) => {
   saveUsers(users);
 
   res.json({ linkToken: user.dashboard.linkToken });
+});
+
+app.post("/api/game/link", (req, res) => {
+  const { token, identifier } = req.body || {};
+
+  if (!token || !identifier) {
+    res.status(400).json({ error: "Token in identifier sta obvezna." });
+    return;
+  }
+
+  const users = getUsers();
+  const user = users.find((entry) => entry.dashboard?.linkToken === token);
+
+  if (!user) {
+    res.status(404).json({ error: "Link token ni veljaven." });
+    return;
+  }
+
+  user.linkedIdentifier = String(identifier);
+  user.linkedCharacter = true;
+  user.lastLinkedAt = new Date().toISOString();
+  user.dashboard.linkedCharacter = true;
+  user.dashboard.summary = "Character je povezan. Dashboard bo ob naslednjem odpiranju vlekel live podatke iz baze.";
+  saveUsers(users);
+
+  res.json({ success: true, username: user.username });
 });
 
 app.get("/api/news", (_req, res) => {

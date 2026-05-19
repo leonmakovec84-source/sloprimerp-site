@@ -14,6 +14,10 @@ function setHref(el, value) {
 }
 
 function currency(value) {
+  if (value === null || value === undefined || value === "") {
+    return "--";
+  }
+
   return new Intl.NumberFormat("sl-SI", {
     style: "currency",
     currency: "EUR",
@@ -296,6 +300,16 @@ async function loadDashboard() {
     setText(document.getElementById("dashboardJobRank"), profile.jobRank);
     setText(document.getElementById("linkTokenValue"), profile.linkToken);
     setText(document.getElementById("linkTokenCommand"), `/link ${profile.linkToken}`);
+    setText(
+      document.getElementById("accountLinkTitle"),
+      profile.linkedCharacter ? "Account Linked" : "Account Not Linked"
+    );
+    setText(
+      document.getElementById("accountLinkDescription"),
+      profile.linkedCharacter
+        ? "Character je uspesno povezan. Dashboard zdaj prikazuje podatke iz baze, ko so na voljo."
+        : "Povezi svoj SLOPrimeRP character za dostop do player data, financ, vozil in naprednega dashboard pregleda."
+    );
 
     const inventoryList = document.getElementById("inventoryList");
     const vehicleList = document.getElementById("vehicleList");
@@ -308,12 +322,17 @@ async function loadDashboard() {
       </div>
     `).join("");
 
-    vehicleList.innerHTML = profile.vehicles.map((vehicle) => `
+    vehicleList.innerHTML = (profile.vehicles || []).length ? profile.vehicles.map((vehicle) => `
       <div class="vehicle-item">
         <span>${vehicle.plate}</span>
         <strong>${vehicle.model}</strong>
       </div>
-    `).join("");
+    `).join("") : `
+      <div class="vehicle-item">
+        <span>Status</span>
+        <strong>Povezi character za prikaz vozil</strong>
+      </div>
+    `;
 
     statList.innerHTML = profile.stats.map((item) => `
       <div class="stat-item">
