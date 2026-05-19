@@ -1,4 +1,4 @@
 Config = {}
 
-Config.ApiBaseUrl = "https://YOUR_RENDER_DOMAIN.onrender.com"
+Config.ApiBaseUrl = "https://sloprimerp-site.onrender.com/api/game/link"
 Config.LinkEndpoint = "/api/game/link"
