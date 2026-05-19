@@ -17,7 +17,7 @@ window.SLOPRIME_CONFIG = {
     tebex: "",
     socials: {
       instagram: "#",
-      tiktok: "#",
+      tiktok: "https://vm.tiktok.com/ZNRtFGMjq/",
       youtube: "#"
     }
   },
@@ -28,11 +28,7 @@ window.SLOPRIME_CONFIG = {
     fallbackOnline: false
   },
   auth: {
-    demoMode: true
-  },
-  news: {
-    apiUrl: "/api/news",
-    discordChannelUrl: "https://discord.com/channels/1384199998081732608/1492519013924737154"
+    demoMode: false
   },
   gallery: [
     {

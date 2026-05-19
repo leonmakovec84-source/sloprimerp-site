@@ -7,10 +7,10 @@
   --line-soft: rgba(255, 255, 255, 0.05);
   --text: #f7f8fb;
   --muted: #99a3ba;
-  --gold: #f4c96b;
-  --gold-strong: #d89a2a;
-  --violet: #7f5af0;
-  --violet-soft: #4338ca;
+  --gold: #45f0c5;
+  --gold-strong: #21b9d7;
+  --violet: #0fdfc6;
+  --violet-soft: #118cb5;
   --discord: #5865f2;
   --green: #4ade80;
   --danger: #ff7f82;
@@ -34,8 +34,8 @@ body {
   color: var(--text);
   font-family: "Inter", sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(127, 90, 240, 0.18), transparent 28%),
-    radial-gradient(circle at top right, rgba(244, 201, 107, 0.16), transparent 22%),
+    radial-gradient(circle at top left, rgba(15, 223, 198, 0.14), transparent 28%),
+    radial-gradient(circle at top right, rgba(69, 240, 197, 0.12), transparent 22%),
     linear-gradient(180deg, #070911 0%, #090c16 48%, #07080e 100%);
 }
 
@@ -86,11 +86,11 @@ img {
 }
 
 .ambient-one {
-  background: radial-gradient(circle at 20% 20%, rgba(127, 90, 240, 0.48), transparent 26%);
+  background: radial-gradient(circle at 20% 20%, rgba(17, 140, 181, 0.4), transparent 26%);
 }
 
 .ambient-two {
-  background: radial-gradient(circle at 80% 12%, rgba(244, 201, 107, 0.32), transparent 24%);
+  background: radial-gradient(circle at 80% 12%, rgba(69, 240, 197, 0.28), transparent 24%);
 }
 
 .premium-panel {
@@ -104,7 +104,7 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #d9c790;
+  color: #7ff6df;
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.72rem;
@@ -115,7 +115,7 @@ img {
   content: "";
   width: 30px;
   height: 1px;
-  background: linear-gradient(90deg, rgba(244, 201, 107, 0), rgba(244, 201, 107, 1));
+  background: linear-gradient(90deg, rgba(69, 240, 197, 0), rgba(69, 240, 197, 1));
 }
 
 .navbar {
@@ -306,7 +306,7 @@ img {
 .hero-overlay {
   background:
     linear-gradient(90deg, rgba(5, 6, 11, 0.96) 0%, rgba(5, 7, 14, 0.7) 48%, rgba(6, 8, 15, 0.92) 100%),
-    radial-gradient(circle at center, rgba(127, 90, 240, 0.18), transparent 24%);
+    radial-gradient(circle at center, rgba(17, 140, 181, 0.18), transparent 24%);
 }
 
 .hero-grid {
@@ -364,8 +364,8 @@ img {
 
 .button-gold {
   color: #120d02;
-  background: linear-gradient(180deg, #f8d98e, #d89a2a);
-  box-shadow: 0 18px 38px rgba(216, 154, 42, 0.3);
+  background: linear-gradient(180deg, #57f4d2, #21b9d7);
+  box-shadow: 0 18px 38px rgba(33, 185, 215, 0.3);
 }
 
 .button-dark,
@@ -658,8 +658,8 @@ img {
 .mini-chip {
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(127, 90, 240, 0.18);
-  color: #c4b5fd;
+  background: rgba(33, 185, 215, 0.18);
+  color: #9ef7e8;
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -867,19 +867,19 @@ img {
   margin-top: 18px;
   padding: 18px 20px;
   border-radius: 16px;
-  border: 1px solid rgba(127, 90, 240, 0.24);
+  border: 1px solid rgba(33, 185, 215, 0.24);
   background: rgba(7, 8, 15, 0.9);
 }
 
 .token-box strong {
   display: block;
   margin-top: 10px;
-  color: #8b7dff;
+  color: #6cf0dc;
   word-break: break-all;
 }
 
 .token-command code {
-  color: #b7abff;
+  color: #7ff6df;
 }
 
 .dashboard-cards {

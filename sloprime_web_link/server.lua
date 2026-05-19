@@ -1,6 +1,12 @@
 local ESX = exports["es_extended"]:getSharedObject()
 
 local function notifyPlayer(src, message)
+    local xPlayer = ESX.GetPlayerFromId(src)
+    if xPlayer and xPlayer.showNotification then
+        xPlayer.showNotification(message)
+        return
+    end
+
     TriggerClientEvent("chat:addMessage", src, {
         args = { "^3SLOPrimeRP", message }
     })
@@ -24,7 +30,7 @@ RegisterCommand("link", function(source, args)
         return
     end
 
-    local identifier = xPlayer.getIdentifier()
+    local identifier = xPlayer.identifier or (xPlayer.getIdentifier and xPlayer.getIdentifier()) or ""
     if not identifier or identifier == "" then
         notifyPlayer(src, "Identifier ni bil najden.")
         return
@@ -36,8 +42,11 @@ RegisterCommand("link", function(source, args)
         identifier = identifier
     })
 
+    print(("[SLOPrimeRP Web Link] Linking %s with token %s"):format(identifier, token))
+
     PerformHttpRequest(endpoint, function(statusCode, responseBody)
         if statusCode < 200 or statusCode >= 300 then
+            print(("[SLOPrimeRP Web Link] API failed with status %s and body %s"):format(statusCode, responseBody or ""))
             notifyPlayer(src, "Povezava ni uspela. Preveri token ali web API.")
             return
         end
@@ -50,6 +59,7 @@ RegisterCommand("link", function(source, args)
         if parsed.success then
             notifyPlayer(src, "Account je bil uspesno povezan s spletno stranjo.")
         else
+            print(("[SLOPrimeRP Web Link] API returned unexpected body %s"):format(responseBody or ""))
             notifyPlayer(src, "API ni vrnil uspesnega odgovora.")
         end
     end, "POST", payload, {
