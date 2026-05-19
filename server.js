@@ -540,6 +540,14 @@ app.post("/api/auth/forgot-password", (req, res) => {
   });
 });
 
+app.get("/api/health", (_req, res) => {
+  res.json({
+    ok: true,
+    app: "sloprimerp-site",
+    version: "web-link-enabled"
+  });
+});
+
 app.get("/api/dashboard/overview", requireAuth, (req, res) => {
   getLiveDashboardForUser(req.user)
     .then((liveDashboard) => {
@@ -562,6 +570,14 @@ app.post("/api/account/regenerate-link-token", requireAuth, (req, res) => {
   saveUsers(users);
 
   res.json({ linkToken: user.dashboard.linkToken });
+});
+
+app.get("/api/game/link", (_req, res) => {
+  res.json({
+    ok: true,
+    method: "POST required",
+    endpoint: "/api/game/link"
+  });
 });
 
 app.post("/api/game/link", (req, res) => {
